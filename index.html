@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+ <html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title>Smart Tasker</title>
+        <meta name="description" content="">
+        <meta name="HandheldFriendly" content="True">
+        <meta http-equiv="cleartype" content="on">
+    	<meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" name="viewport">
+
+        
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+
+        <link rel="stylesheet" href="assets/css/normalize.css">
+        <link rel="stylesheet" href="assets/css/main.css">
+		
+		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+		<script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
+		<script type="text/javascript" charset="utf-8" src="GAPlugin.js"></script>
+		
+		<script type="text/javascript" charset="utf-8" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC0rawyK1zrOSvEs5IhE37K4txiUbZl3JU&sensor=true"></script>
+		
+		<script type="text/javascript" charset="utf-8" src="assets/js/jquery.js"></script>
+		<script type="text/javascript" charset="utf-8" src="assets/js/scripts.js"></script>
+		<script type="text/javascript" charset="utf-8" src="assets/js/facebook.js"></script>
+		<script type="text/javascript" charset="utf-8" src="assets/js/database.js"></script>
+		
+		<script type="text/javascript" charset="utf-8">
+		    // Wait for Cordova to load
+		    document.addEventListener("deviceready", onDeviceReady, false);
+		    var gaPlugin;
+		    var pictureSource;
+		    var destinationType;
+		    function onDeviceReady() {
+		    	app.init();
+		    	pictureSource = navigator.camera.PictureSourceType;
+		    	destinationType = navigator.camera.DestinationType;
+		    	gaPlugin = window.plugins.gaPlugin; 
+		    	gaPlugin.init(successHandler, errorHandler, "UA-36289159-1", 10);
+		    	
+		    }
+		</script>
+    </head>
+    <body>
+    	<div id="fb-root"></div>
+        
+      	<div class="wrapper not-logged-in" data-role="page" id="loginPage"> 
+          	<div class="header" data-role="header"> 
+          		<a href="#" class="back-btn">Tagasi</a>
+            	<!-- <a href="#" id="btnExit" data-role="button" data-inline="true"  data-icon="back" >Exit</a> -->
+              	<span id="logo"></span>
+              	<h2 style="display:none;">Menüü</h2>
+          	</div> 
+          	<div class="content" data-role="content">
+          		<div class="login-content slide-content">
+          			<div id="login" class="facebookBtn">Facebook Login</div>
+					<div class="login-form-wrap small">
+	                	<h3>või logi sisse firma  alt</h3>
+	                	
+	                	<form action="" method="post" id="loginForm">
+	                    	<input id="mail" name="" type="email" placeholder="E-mail">
+	                        <input id="password" name="" type="password" placeholder="Parool">
+	                        <input id="loginBtn" class="btn blue" name="" type="submit" value="Login">
+	                        <!--<fieldset>
+	                        	<input id="keepLoggedIn" name="" type="checkbox" value="">
+	                            <label for="keepLoggedIn">keep me logged in</label>
+	                        </fieldset>-->
+	                    </form>
+	                </div>
+	                
+                </div>
+                <div class="mainmenu slide-content">
+                	<!-- all the same -->
+                    <a href="step2" rel="getPrivate">
+                        <span class="icon private-tasks"></span>
+                        <p>Kohustuslikud ülesanded <em class="note"></em></p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <a href="step2" rel="getPublic">
+                        <span class="icon public-tasks"></span>
+                        <p>Teeni või võida <em class="note"></em></p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <a href="step2" rel="getUnfinished">
+                        <span class="icon unfinished-tasks"></span>
+                        <p>Lõpetamata ülesanded <em class="note"></em></p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <a href="step2" rel="getDenied">
+                        <span class="icon rejected-tasks"></span>
+                        <p>Tagasi lükatud ülesanded <em class="note"></em></p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <!-- different -->
+                    <a href="step2" rel="getStats">
+                        <span class="icon stats"></span>
+                        <p>Statistika</p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <a href="step2" rel="getPrizes">
+                        <span class="icon prizes"></span>
+                        <p>Võidetud auhinnad <em class="note"></em></p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                    <a href="step2" rel="getProfile">
+                        <span class="icon profile"></span>
+                        <p>Profiil</p>
+                        <span class="arrow-icon"></span>
+                    </a>
+                </div>
+                
+                <div class="tasklist slide-content">
+                
+                	<div class="statistics-content" style="display:none;">
+                		<a href="#">
+	                        <div class="prize-wrap">
+	                            <strong style="font-size:20px;" id ="stats_accepted"></strong>
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Vastu võetud ülesandeid</h3>
+	                        </div>
+	                    </a>
+	                    <a href="#">
+	                        <div class="prize-wrap">
+	                            <strong style="font-size:20px;" id ="stats_done"></strong>
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Täidetud ülesandeid</h3>
+	                        </div>
+	                    </a>
+	                    <a href="#">
+	                        <div class="prize-wrap">
+	                            <strong style="font-size:20px;" id ="stats_rejected"></strong>
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Tagasi lükatud ülesandeid</h3>
+	                        </div>
+	                    </a>
+	                    <a href="#">
+	                        <div class="prize-wrap">
+	                            <strong style="font-size:20px;" id ="stats_money"></strong>
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Raha võidetud</h3>
+	                        </div>
+	                    </a>
+	                    <a href="#">
+	                        <div class="prize-wrap">
+	                            <strong style="font-size:20px;" id ="stats_prizes"></strong>
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Auhindu võidetud</h3>
+	                        </div>
+	                    </a>
+                	</div>
+                	
+                	<div class="prizes-content" style="display:none;">
+                		<!--<a href="#">
+	                        <div class="prize-wrap">
+	                            <span class="label">Auhind</span>
+	                            <img class="prize-thumb" src="assets/images/img-prize-thumb.jpg" width="25" height="25">
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Auhinna pealkiri</h3>
+	                            <p><span class="distance">Kätte saamis info</span> <span class="deadline">Tähtaeg <strong class="time-left">30 päeva</strong></span></p>
+	                        </div>
+	                    </a>-->
+	                    <h3>Auhindu pole veel</h3>
+                	</div>
+                	
+                	<div class="profile-content" style="display:none;">
+                		
+	                	<div class="profile-form-wrap" style="width:300px;text-align:center;margin:0 auto;">
+	                		<h3>Muuda oma andmeid</h3>
+	                		<form action="" method="post">
+		                		<input id="profile_firstname" name="" type="text" placeholder="Eesnimi">
+		                		<input id="profile_lastname" name="" type="text" placeholder="Eesnimi">
+		                		<input id="profile_bank" name="" type="text" placeholder="Panga konto nr">
+		                    	<input id="profile_mail" name="" type="email" placeholder="E-mail">
+		                    	<input id="profile_password" name="" type="text" placeholder="Uus parool">
+		                    	
+		                        <fieldset style="margin:0 auto;width:240px;text-align:left;">
+		                        	<strong>Sugu: </strong>
+		                        	<input id="sex_male" name="sex" type="radio" value="male">
+		                        	<label for="sex">Mees</label>
+		                        	<input id="sex_female" name="sex" type="radio" value="female">
+		                            <label for="sex">Naine</label>
+		                        </fieldset>
+		                        <input id="saveProfileBtn" class="btn blue" name="" type="submit" value="Salvesta">
+		                        
+	                        
+	                        </form>
+	                	</div>
+                	</div>
+                
+                	<div class="tasklist-content" style="display:none;">
+                	</div>
+                	<div class="task-prize-template template" style="display:none;">
+	                    <a href="#">
+	                        <div class="prize-wrap">
+	                            <span class="label">Auhind</span>
+	                            <img class="prize-thumb" src="assets/images/img-prize-thumb.jpg" width="25" height="25">
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Auhinna pealkiri</h3>
+	                            <p><span class="distance">Kaugus <strong class="distance-value">650</strong></span> <span class="deadline">Tähtaeg <strong class="time-left">2 h 45 min</strong></span></p>
+	                            <p><strong style="font-weight:normal;" class="address"></strong></p>
+	                        </div>
+	                        <span class="arrow-icon"></span>
+	                    </a>
+                    </div>
+                    <div class="prizes-prize-template template" style="display:none;">
+                    	
+                    	<a href="#">
+	                        <div class="prize-wrap">
+	                            <span class="label">Auhind</span>
+	                            <img class="prize-thumb" src="assets/images/img-prize-thumb.jpg" width="25" height="25">
+	                        </div>
+	                        <div class="text-wrap">
+	                            <h3 class="task-name">Auhinna pealkiri</h3>
+	                            <p><span class="distance">Kätte saamis info</span> <span class="deadline">Tähtaeg <strong class="time-left">2 h 45 min</strong></span></p>
+	                        </div>
+	                    </a>
+                    	
+                    </div>
+                    
+                </div>
+                
+                <div class="detailed-task slide-content">
+                	<div class="detailed-content">
+                		
+                	</div>
+                	
+                	<div class="started-content tasklist" style="display:none;">
+                		
+                	</div>
+                	
+                	<div class="task-prize-template template" style="display:none;">
+	                    <div class="task-info">
+	                        <div class="prize-wrap">
+	                            <span class="label">Auhind</span>
+	                            <img class="prize-thumb" src="assets/images/img-prize-thumb-medium.jpg" width="43" height="43">
+	                        </div>
+	                        <h3 class="task-name"></h3>
+	                        <p><span class="distance"></span> <span class="deadline">Tähtaeg <strong class="time-left"></strong></span></p>
+	                    </div>
+	                    <p class="desc"></p>
+	                    <p class="address"></p>
+	                    <ul class="list"></ul>
+	                    <div id="taskMap">Kaart</div>
+	                    <a href="#" class="btn light-blue task-btn startTask">Alusta ülesannet</a>
+                    </div>
+                    
+                    <div class="sub-task-template template" style="display:none;">
+	                    <a href="#">
+	                        <div class="text-wrap">
+	                            <h3 class="task-name"></h3>
+	                        </div>
+	                        <span class="arrow-icon"></span>
+	                    </a>
+                    </div>
+                    
+                    <a href="#" class="btn light-blue task-btn confirmTasks disabled">Kinnita</a>
+                    
+                </div>
+                
+                <div class="sub-task slide-content">
+                	<div class="sub-content">
+                		<h3>Ülesande kirjeldus</h3>
+                		
+                		<p class="pic">
+	                		<a href="#" class="btn light-blue task-btn doPic">Tee pilt</a>
+	                		
+	                		<img src="" class="captured-image" style="max-width:275px;max:height:300px;" />
+                		</p>
+                		<p class="pic_fb">
+	                		<a href="#" class="btn light-blue task-btn doPic">Tee pilt</a>
+	                		<img src="" class="captured-image" style="max-width:275px;max:height:300px;" />
+	                		<a href="#" class="btn light-blue task-btn postFB disabled">Postita facebooki</a>
+                		</p>
+                		<p class="tracking">
+	                		Pead olema 50m raadiuses<br />
+	                		<div id="sub_map"></div>
+                		</p>
+                		<p class="question">
+	                		<span class="tip"></span><br />
+	                		<input type="text" placeholder="vastus" id="subAnswer" />
+                		</p>
+                		<p class="multi">
+	                		<span class="options" style="display:inline-block;text-align:left;"></span>
+                		</p>
+                		<p class="select">
+                			<span class="tip"></span><br /><br />
+	                		<select id="rating">
+	                			<option value="0">Vali</option>
+	                			<option value="1">1</option>
+	                			<option value="2">2</option>
+	                			<option value="1">3</option>
+	                			<option value="2">4</option>
+	                			<option value="1">5</option>
+	                			<option value="2">6</option>
+	                			<option value="1">7</option>
+	                			<option value="2">8</option>
+	                			<option value="1">9</option>
+	                			<option value="2">10</option>
+	                		</select>
+                		</p>
+                		
+                		<a href="#" class="btn light-blue task-btn confirmTask disabled">Kinnita</a>
+                		
+                	</div>
+                	
+                	
+                </div>
+                
+          	</div> <!-- /.content -->
+      	</div> <!-- /.wrapper -->
+        
+    </body>
+</html>
