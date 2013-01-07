@@ -717,6 +717,10 @@ app = {
 	loadSub: function() {
 		app.curFunction = 'loadSub';
 		$('.captured-image').hide();
+		
+		$('#subAnswer').val('');
+		$('#rating').val('');
+		
 		$('.sub-content').find('.confirmTask').addClass('disabled');
 		$('.sub-content').find('.postFB').addClass('disabled');
 		
@@ -1119,7 +1123,7 @@ function uploadFile(mediaFile) {
 
 			app.position = position;
     
-		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.latitude + "&lng=" + position.longitude;
+		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
 		    //console.log(path);
 		    console.log(upload_url);
 		    
