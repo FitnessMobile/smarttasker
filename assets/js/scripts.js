@@ -1121,7 +1121,7 @@ function uploadFile(mediaFile) {
     
 		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.latitude + "&lng=" + position.longitude;
 		    //console.log(path);
-		    //console.log(upload_url);
+		    console.log(upload_url);
 		    
 		    try {
 		
