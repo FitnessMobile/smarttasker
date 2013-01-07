@@ -1112,46 +1112,55 @@ function uploadFile(mediaFile) {
 
     var ft = new FileTransfer(),
     path = mediaFile;
-    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task;
-    //console.log(path);
-    //console.log(upload_url);
     
-    try {
+    if (navigator.geolocation) {
 
-	    ft.upload(path, upload_url,
-	        function(result) {
-	        	//console.log(result.response);
-				if (parseInt(result.response)) {
-				
-					$('.pic_fb').find('.ajax-loader').remove();
-					$('.pic').find('.ajax-loader').remove();
-					
-					if (sub_tasks[sub_task].type == 'pic_fb') {
-						postToFacebook(parseInt(result.response), sub_tasks[app.currentSub].name, sub_tasks[app.currentSub].description);
-						$('.sub-content').find('.confirmTask').removeClass('disabled');
-					} else {
-						app.finishedTask = u_sub_task;
-						app.navigate('task.html', 'startTask');
-					}
-					
-				} else {
-					
-					$('.pic_fb').find('.ajax-loader').remove();
-					$('.pic').find('.ajax-loader').remove();
+		navigator.geolocation.getCurrentPosition(function(position) {
 
-					navigator.notification.alert('Serveri poolne viga!', null, 'Teade!');
-					app.deliverError(result.response, '1118');
-				}
-				
-	        },
-	        function(error) {
-	        	navigator.notification.alert('Error uploading file ' + path + ': ' + error.code, null, 'Uh oh!');
-	            //console.log('Error uploading file ' + path + ': ' + error.code);
-	        }, options
-		);
-	} catch(e) {
-		alert(e);
-	}   
+			app.position = position;
+    
+		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.latitude + "&lng=" + position.longitude;
+		    //console.log(path);
+		    //console.log(upload_url);
+		    
+		    try {
+		
+			    ft.upload(path, upload_url,
+			        function(result) {
+			        	//console.log(result.response);
+						if (parseInt(result.response)) {
+						
+							$('.pic_fb').find('.ajax-loader').remove();
+							$('.pic').find('.ajax-loader').remove();
+							
+							if (sub_tasks[sub_task].type == 'pic_fb') {
+								postToFacebook(parseInt(result.response), sub_tasks[app.currentSub].name, sub_tasks[app.currentSub].description);
+								$('.sub-content').find('.confirmTask').removeClass('disabled');
+							} else {
+								app.finishedTask = u_sub_task;
+								app.navigate('task.html', 'startTask');
+							}
+							
+						} else {
+							
+							$('.pic_fb').find('.ajax-loader').remove();
+							$('.pic').find('.ajax-loader').remove();
+		
+							navigator.notification.alert('Serveri poolne viga!', null, 'Teade!');
+							app.deliverError(result.response, '1118');
+						}
+						
+			        },
+			        function(error) {
+			        	navigator.notification.alert('Error uploading file ' + path + ': ' + error.code, null, 'Uh oh!');
+			            //console.log('Error uploading file ' + path + ': ' + error.code);
+			        }, options
+				);
+			} catch(e) {
+				alert(e);
+			}  
+		});
+	} 
 }
 
 function uploadFile2(mediaFile, user, task, sub_task) {
