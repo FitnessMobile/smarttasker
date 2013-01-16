@@ -75,7 +75,6 @@ app = {
 			$('#profile_password').hide();
 			$('.private-tasks').parent().hide();
 		} else {
-			console.log('ok');
 			$('#profile_password').show();
 			$('.private-tasks').parent().show();
 		}
@@ -211,6 +210,7 @@ app = {
 					user.sex = data.sex;
 					user.mail = '';
 					user.fb_id = fb_id;
+					user.company_id = false;
 					
 					db.transaction(insertUser, errorDB, successUser);
 					
@@ -225,6 +225,7 @@ app = {
 					user.lastname = result.lastname;
 					user.sex = result.sex;
 					user.fb_id = result.facebook;
+					user.company_id = false;
 					/*if(result.company_id) {
 						$('.private-tasks').parent().show();
 					} else {*/
@@ -244,6 +245,7 @@ app = {
 					user.lastname = result.lastname;
 					user.sex = result.sex;
 					user.fb_id = result.facebook;
+					user.company_id = result.company_id;
 					
 					$('.private-tasks').parent().show();
 					
@@ -397,6 +399,9 @@ app = {
 			}, 'jsonp');
 			
 		} else if (app.tasksType == 'getProfile') {
+			if (user.company_id) {
+				$('#profile_password').show();
+			}
 			$('.profile-content').show();
 			$('#profile_firstname').val(user.firstname);
 			$('#profile_lastname').val(user.lastname);
@@ -520,19 +525,20 @@ app = {
 							var map = new google.maps.Map(document.getElementById("tasksMap"), mapOptions);
 
 							setMarkers(map, locations);
-							
-							var myloc = new google.maps.Marker({
-							    clickable: false,
-							    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-									new google.maps.Size(22,22),
-							        new google.maps.Point(0,18),
-							        new google.maps.Point(11,11)),
-							    shadow: null,
-							    zIndex: 999,
-							    map: map
-							});
-							var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
-							myloc.setPosition(me);
+							setTimeout(function() {
+								var myloc = new google.maps.Marker({
+								    clickable: false,
+								    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+										new google.maps.Size(22,22),
+								        new google.maps.Point(0,18),
+								        new google.maps.Point(11,11)),
+								    shadow: null,
+								    zIndex: 999,
+								    map: map
+								});
+								var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+								myloc.setPosition(me);
+							}, 200);
 							
 						});
 						$('.list-btn').unbind('click');
@@ -693,18 +699,20 @@ app = {
 				var map = new google.maps.Map(document.getElementById("taskMap"), mapOptions);
 				directionsDisplay.setMap(map);
 				
-				var myloc = new google.maps.Marker({
-				    clickable: false,
-				    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-				                                                    new google.maps.Size(22,22),
-				                                                    new google.maps.Point(0,18),
-				                                                    new google.maps.Point(11,11)),
-				    shadow: null,
-				    zIndex: 999,
-				    map: map
-				});
-				var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
-				myloc.setPosition(me);
+				setTimeout(function() {
+					var myloc = new google.maps.Marker({
+					    clickable: false,
+					    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+					                                                    new google.maps.Size(22,22),
+					                                                    new google.maps.Point(0,18),
+					                                                    new google.maps.Point(11,11)),
+					    shadow: null,
+					    zIndex: 999,
+					    map: map
+					});
+					var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+					myloc.setPosition(me);
+				}, 200);
 				
 				locations = [];
 				locations[0] = [item.name, item.latitude, item.longitude, item.id];
