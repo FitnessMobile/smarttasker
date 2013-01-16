@@ -428,6 +428,8 @@ app = {
 	
 	loadTasks: function() {
 		$('.dir-btn').hide();
+		$('.list-btn').hide();
+		
 		app.curFunction = 'loadTasks';
 		
 		$('.back-btn').unbind('click');
@@ -563,6 +565,7 @@ app = {
 	loadTask: function() {
 	
 		$('.map-btn').hide();
+		$('.list-btn').hide();
 	
 		app.curFunction = 'loadTask';
 		

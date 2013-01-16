@@ -20,32 +20,19 @@ var Facebook = {
 		 // Open Child browser and ask for permissions
 		 window.plugins.childBrowser.onLocationChange = function(loc){
 		 	//console.log(loc);
-			Facebook.facebookLocChanged(loc);
+			Facebook.facebookLocChanged(loc, false, false);
 		 };
 	
 		window.plugins.childBrowser.showWebPage(authorize_url, { showLocationBar: false });
 
 	},
-	facebookLocChanged:function(loc){
- 
-		// When the childBrowser window changes locations we check to see if that page is our success page.
-		
-		//console.log('Loc1: ' + loc);
+	facebookLocChanged:function(loc, post, params){
 		
 		if (loc.indexOf("https://www.facebook.com/connect/login_success.html") == 0) {
 
-			//console.log('Loc2: ' + loc);
-			//var fbCode = getQueryVariable(loc, 'code');
 			var fbCode2 = loc.replace(/^.*?\=/, '');
 			
-			//console.log('origina_code: ' + fbCode);
-			//console.log('origina_code2: ' + fbCode2);
-			
-			//fbCode = fbCode.replace("#_=_","");
 			fbCode2 = fbCode2.replace("#_=_","");
-			
-			//console.log('replaced code: ' + fbCode);
-			//console.log('replaced code2: ' + fbCode2);
 			
 			token_url = 'https://graph.facebook.com/oauth/access_token?client_id='+my_client_id+'&client_secret='+my_secret+'&code='+fbCode2+'&redirect_uri=https://www.facebook.com/connect/login_success.html';
 			
@@ -59,12 +46,23 @@ var Facebook = {
 					window.plugins.childBrowser.close();
 					// We store our token in a localStorage Item called facebook_token
 					localStorage.setItem(facebook_token, data.split("=")[1]);
- 
-					app.login(true);
+					if (post) {
+						var url = 'https://graph.facebook.com/me/feed?access_token='+localStorage.getItem(facebook_token);
+						for(var key in params){
+							if(key == "message"){
+								url = url+"&"+key+"="+escape(params[key]);
+							}
+							else {
+								url = url+"&"+key+"="+encodeURIComponent(params[key]);
+							}
+						}
+						var req = Facebook.request(url);
+					} else {
+						app.login(true);	
+					}
+					
 				},
 				error: function(error) {
-					//console.log('Error: ');
-					//console.log(error);
 					app.deliverError('FB get data error on url: ' + token_url, '68');
 					window.plugins.childBrowser.close();
 				}
@@ -81,30 +79,39 @@ var Facebook = {
 		return req;
 	},
 	post:function(_fbType,params){
- 
-		// Our Base URL which is composed of our request type and our localStorage facebook_token
-		var url = 'https://graph.facebook.com/me/'+_fbType+'?access_token='+localStorage.getItem(facebook_token);
- 
-		// Build our URL
-		for(var key in params){
-			if(key == "message"){
- 
-				// We will want to escape any special characters here vs encodeURI
-				url = url+"&"+key+"="+escape(params[key]);
+		
+		if(!localStorage.getItem(facebook_token)) {
+			
+			var authorize_url = "https://graph.facebook.com/oauth/authorize?";
+			authorize_url += "client_id=" + my_client_id;
+			authorize_url += "&redirect_uri=" + my_redirect_uri;
+			authorize_url += "&display=" + my_display;
+			authorize_url += "&scope=publish_stream,offline_access"
+			 
+			// Open Child browser and ask for permissions
+			window.plugins.childBrowser.onLocationChange = function(loc){
+			 	//console.log(loc);
+				Facebook.facebookLocChanged(loc, true, params);
+			};
+		
+			window.plugins.childBrowser.showWebPage(authorize_url, { showLocationBar: false });
+			
+		} else {
+			
+			var url = 'https://graph.facebook.com/me/'+_fbType+'?access_token='+localStorage.getItem(facebook_token);
+			for(var key in params){
+				if(key == "message"){
+					url = url+"&"+key+"="+escape(params[key]);
+				}
+				else {
+					url = url+"&"+key+"="+encodeURIComponent(params[key]);
+				}
 			}
-			else {
-				url = url+"&"+key+"="+encodeURIComponent(params[key]);
-			}
+			var req = Facebook.request(url);
+			
 		}
-		
-		//console.log(url);
-		
- 		//console.log(req);
-		
-		var req = Facebook.request(url);
+
  
-		// Our success callback
-		//req.onload = Facebook.success();
 	},
 	get: function() {
 		data = {};
