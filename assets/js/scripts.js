@@ -285,6 +285,10 @@ app = {
 	},
 	loadHome: function() {
 		
+		$('.dir-btn').hide();
+		$('.list-btn').hide();
+		$('.map-btn').hide();
+		
 		app.curFunction = 'loadHome';
 	
 		$('header').find('h1').html('Kodu');
