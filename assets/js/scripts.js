@@ -74,6 +74,10 @@ app = {
 		if (!localStorage.getItem('company_id') || localStorage.getItem('company_id') == 0) {
 			$('#profile_password').hide();
 			$('.private-tasks').parent().hide();
+		} else {
+			console.log('ok');
+			$('#profile_password').show();
+			$('.private-tasks').parent().show();
 		}
 	},
 	
@@ -423,7 +427,7 @@ app = {
 	},
 	
 	loadTasks: function() {
-		
+		$('.dir-btn').hide();
 		app.curFunction = 'loadTasks';
 		
 		$('.back-btn').unbind('click');
@@ -453,24 +457,41 @@ app = {
 				
 				$.get(app.serverUrl + '?action=getTasks', data, function(results) {
 					if(results.length) {
-					$('.tasklist-content').html('');
+					$('.tasklist-content').html('<div id="tasksMap"></div>');
+
+						$('.map-btn').show();
+						
+						locations = [];
+							
 						$.each(results, function(i, item) {
-	
+							
+							locations[i] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
+							
 							template = $('.tasklist').find('.task-prize-template');
 							template.find('a').attr('rel', item.id);
 							template.find('.task-name').html(item.name);
 							template.find('.time-left').html(item.end);
-							
-							if(parseInt(item.distance) > 1000) {
-								temp_distance = Math.round(parseInt(item.distance)/1000);
-								temp_distance = temp_distance + 'km';
-							} else {
-								temp_distance = item.distance + 'm';
+							if (item.address) {
 								
+								if(parseInt(item.distance) > 1000) {
+									temp_distance = Math.round(parseInt(item.distance)/1000);
+									temp_distance = temp_distance + 'km';
+								} else {
+									temp_distance = item.distance + 'm';
+									
+								}
+								template.find('.distance-value').html(temp_distance);
+								temp_address = item.address.replace(', Eesti Vabariik', '');
+									template.find('.address').html(temp_address);
+									
+								$('.distance').show();
+								$('.address').show();
+								
+							} else {
+								$('.distance').hide();
+								$('.address').hide();
 							}
-							template.find('.distance-value').html(temp_distance);
-							temp_address = item.address.replace(', Eesti Vabariik', '');
-								template.find('.address').html(temp_address);
+							
 							
 							$('.tasklist-content').append(template.html());
 							if(item.prize_type == 'cash') {
@@ -479,6 +500,46 @@ app = {
 								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="25" height="25">');
 							}
 						});
+						$('.map-btn').unbind('click');
+						$('.map-btn').click(function() {
+							$('.list-btn').show();
+							$('.map-btn').hide();
+							$('#tasksMap').show();
+							$('#tasksMap').css({
+								'width': '100%',
+								'height': '380px'
+							});
+							
+							var mapOptions = {
+								zoom: 15,
+								center: new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude),
+								mapTypeId: google.maps.MapTypeId.ROADMAP
+							}
+							var map = new google.maps.Map(document.getElementById("tasksMap"), mapOptions);
+
+							setMarkers(map, locations);
+							
+							var myloc = new google.maps.Marker({
+							    clickable: false,
+							    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+									new google.maps.Size(22,22),
+							        new google.maps.Point(0,18),
+							        new google.maps.Point(11,11)),
+							    shadow: null,
+							    zIndex: 999,
+							    map: map
+							});
+							var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+							myloc.setPosition(me);
+							
+						});
+						$('.list-btn').unbind('click');
+						$('.list-btn').click(function() {
+							$('.map-btn').show();
+							$('.list-btn').hide();
+							$('#tasksMap').hide();
+						});
+						
 					} else {
 						$('.tasklist-content').html('<h3>Ülesanded puuduvad</h3>');
 					}
@@ -500,6 +561,9 @@ app = {
 	},
 	
 	loadTask: function() {
+	
+		$('.map-btn').hide();
+	
 		app.curFunction = 'loadTask';
 		
 		$('.back-btn').unbind('click');
@@ -529,6 +593,15 @@ app = {
 			template.find('.task-name').html(item.name);
 			template.find('.time-left').html(item.end);
 			template.find('.desc').html(item.description);
+			
+			if (item.address) {
+				$('.detailed-task').find('#taskMap').show();
+				$('.detailed-task').find('.address').show();
+			} else {
+				$('.detailed-task').find('#taskMap').hide();
+				$('.detailed-task').find('.address').hide();
+			}
+			
 			template.find('.address').html(item.address);
 			if(item.object)
 				template.find('.address').prepend(item.object + ', ');
@@ -561,9 +634,7 @@ app = {
 						sub_template.find('a').css('color', '#888').removeClass('done').find('.arrow-icon').show();
 						
 					$('.started-content').append(sub_template.html());
-					
-					
-					
+
 				});
 			}
 			
@@ -600,18 +671,58 @@ app = {
 			}
 
 			//console.log(app.position.coords);
+			var directionsDisplay;
+			var directionsService = new google.maps.DirectionsService();
+			
 			setTimeout(function() {
+			
+				$('.dir-btn').show();
+			
+				directionsDisplay = new google.maps.DirectionsRenderer();
+				var currentLoc = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+				var destination = new google.maps.LatLng(item.latitude, item.longitude);
+				
 				var mapOptions = {
 					zoom: 15,
 					center: new google.maps.LatLng(item.latitude, item.longitude),
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
 				var map = new google.maps.Map(document.getElementById("taskMap"), mapOptions);
+				directionsDisplay.setMap(map);
+				
+				var myloc = new google.maps.Marker({
+				    clickable: false,
+				    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+				                                                    new google.maps.Size(22,22),
+				                                                    new google.maps.Point(0,18),
+				                                                    new google.maps.Point(11,11)),
+				    shadow: null,
+				    zIndex: 999,
+				    map: map
+				});
+				var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+				myloc.setPosition(me);
 				
 				locations = [];
 				locations[0] = [item.name, item.latitude, item.longitude, item.id];
 				
 				setMarkers(map, locations);
+				
+				$('.dir-btn').click(function() {
+					
+				  var request = {
+				    origin:currentLoc,
+				    destination:destination,
+				    travelMode: google.maps.TravelMode.DRIVING
+				  };
+				  directionsService.route(request, function(result, status) {
+				    if (status == google.maps.DirectionsStatus.OK) {
+				      directionsDisplay.setDirections(result);
+				    }
+				  });
+					
+				});
+				
 			}, 200);
 		
 		}, 'jsonp');
@@ -1046,23 +1157,27 @@ function errorHandler(e) {
 function setMarkers(map, locations) {
 	//console.log(locations);
 	for (var i = 0; i < locations.length; i++) {
-		var lUser = locations[i];
-		var myLatLng = new google.maps.LatLng(lUser[1], lUser[2]);
+		var location = locations[i];
+		var myLatLng = new google.maps.LatLng(location[1], location[2]);
 	
 		var marker = new google.maps.Marker({
 	   		position: myLatLng,
 	    	map: map,
-	    	title: lUser[0],
-	    	id: lUser[3],
-	    	zIndex: lUser[5]
+	    	title: location[0],
+	    	id: location[3],
+	    	zIndex: location[5]
 		});
+		if(location[4] == 'tasks') {
+			google.maps.event.addListener(marker, 'click', function() {
+				app.currentTask = location[3];
+				app.navigate('task.html', 'loadTask');
+			});
+		}
+		
 	}
-  /*
-	google.maps.event.addListener(marker, 'click', function() {
-		app.profileToLoad = marker.id;
-		app.navigate('profile.html', 'loadProfile');
-	});
-  */
+  
+	
+  
 }
 
 // Called when capture operation is finished
