@@ -173,6 +173,39 @@ textarea {
 	background:url(../images/bg-round-arrow-back.png) no-repeat center 50%;
 }
 
+.header .dir-btn {
+	text-indent: -999em;
+	display: none;
+	right: 10px;
+	top: -4px;
+	position: absolute;
+	height: 40px;
+	width: 40px;
+	background:url(../images/dir-icon.png) no-repeat center 50%;
+}
+
+.header .map-btn {
+	text-indent: -999em;
+	display: none;
+	right: 10px;
+	top: 1px;
+	position: absolute;
+	height: 30px;
+	width: 45px;
+	background:url(../images/map-icon.png) no-repeat center 50%;
+}
+
+.header .list-btn {
+	text-indent: -999em;
+	display: none;
+	right: 8px;
+	top: -4px;
+	position: absolute;
+	height: 40px;
+	width: 35px;
+	background:url(../images/list-icon.png) no-repeat center 50%;
+}
+
 /* CONTENT */
 
 .content {
