@@ -56,6 +56,7 @@ app = {
 	position: {},
 	serverUrl: 'http://projects.efley.ee/smarttasker/server.php',
 	curFunction: 'init',
+	mapView: false, 
 	
 	init: function() {
 
@@ -495,12 +496,12 @@ app = {
 								temp_address = item.address.replace(', Eesti Vabariik', '');
 									template.find('.address').html(temp_address);
 									
-								$('.distance').show();
-								$('.address').show();
+								template.find('.distance').show();
+								template.find('.address').show();
 								
 							} else {
-								$('.distance').hide();
-								$('.address').hide();
+								template.find('.distance').hide();
+								template.find('.address').hide();
 							}
 							
 							
@@ -513,6 +514,9 @@ app = {
 						});
 						$('.map-btn').unbind('click');
 						$('.map-btn').click(function() {
+						
+							app.mapView = true;
+						
 							$('.list-btn').show();
 							$('.map-btn').hide();
 							$('#tasksMap').show();
@@ -520,7 +524,7 @@ app = {
 								'width': '100%',
 								'height': '380px'
 							});
-							
+							$('.tasklist-content').find('a').hide();
 							var mapOptions = {
 								zoom: 15,
 								center: new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude),
@@ -532,7 +536,7 @@ app = {
 							setTimeout(function() {
 								var myloc = new google.maps.Marker({
 								    clickable: false,
-								    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+								    icon: new google.maps.MarkerImage('http://maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
 										new google.maps.Size(22,22),
 								        new google.maps.Point(0,18),
 								        new google.maps.Point(11,11)),
@@ -547,10 +551,17 @@ app = {
 						});
 						$('.list-btn').unbind('click');
 						$('.list-btn').click(function() {
+						
+							app.mapView = false;
+						
 							$('.map-btn').show();
 							$('.list-btn').hide();
 							$('#tasksMap').hide();
+							$('.tasklist-content').find('a').show();
 						});
+						
+						if(app.mapView)
+							$('.map-btn').click();
 						
 					} else {
 						$('.tasklist-content').html('<h3>Ülesanded puuduvad</h3>');
@@ -706,7 +717,7 @@ app = {
 				setTimeout(function() {
 					var myloc = new google.maps.Marker({
 					    clickable: false,
-					    icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+					    icon: new google.maps.MarkerImage('http://maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
 					                                                    new google.maps.Size(22,22),
 					                                                    new google.maps.Point(0,18),
 					                                                    new google.maps.Point(11,11)),
