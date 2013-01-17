@@ -1155,7 +1155,7 @@ function postToFacebook(image_id, name, description) {
 	// You can change
 
 	var params = {};
-		params['message'] = msg;
+		params['message'] = 'Lahendasin just ülesande!';
 		params['name'] = 'SmartTasker';
 		params['description'] = description;
 		params['_link'] = "http://www.smarttasker.ee";
@@ -1279,7 +1279,7 @@ function uploadFile(mediaFile) {
 							$('.pic').find('.ajax-loader').remove();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
-								postToFacebook(parseInt(result.response), sub_tasks[app.currentSub].name, sub_tasks[app.currentSub].description);
+								postToFacebook(parseInt(result.response), tasks[app.currentTask].name, sub_tasks[app.currentSub].description);
 								$('.sub-content').find('.confirmTask').removeClass('disabled');
 							} else {
 								app.finishedTask = u_sub_task;
@@ -1317,7 +1317,7 @@ function uploadFile2(mediaFile, user, task, sub_task) {
 			if (response.success == true) {
 		
 				if (sub_tasks[sub_task].type == 'pic_fb') {
-					postToFacebook(response.id, sub_tasks[app.currentSub].name, sub_tasks[app.currentSub].description);
+					postToFacebook(response.id, tasks[app.currentTask].name, sub_tasks[app.currentSub].description);
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
 					app.finishedTask = sub_task;
