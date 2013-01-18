@@ -79,6 +79,14 @@ app = {
 			$('#profile_password').show();
 			$('.private-tasks').parent().show();
 		}
+		
+		if(localStorage.getItem('mail'))
+			$('#mail').val(localStorage.getItem('mail'))
+		if(localStorage.getItem('password')) {
+			$('#password').val(localStorage.getItem('password'))
+			$('#keepLoggedIn').attr('checked', 'checked');
+		}
+		
 	},
 	
 	navigate: function(page, init_function) {
@@ -170,6 +178,13 @@ app = {
 			}
 
 			if(error == false) {
+				if ($('#keepLoggedIn:checked')) {
+					localStorage.setItem('mail', $('#mail').val());
+					localStorage.setItem('password', $('#password').val());
+				} else {
+					localStorage.removeItem('mail');
+					localStorage.removeItem('password');
+				}
 				data = {};
 				data.fb_id = false;		
 				data.mail = $('#mail').val();
@@ -280,7 +295,10 @@ app = {
 			user.prizes_new = 0;
 
 			app.navigate('home.html', 'loadHome');
-		
+			
+			if (user.company_id) {
+				app.trackUser();
+			}
 		}
 		
 	},
@@ -289,6 +307,7 @@ app = {
 		$('.dir-btn').hide();
 		$('.list-btn').hide();
 		$('.map-btn').hide();
+		$('.refresh-btn').show();
 		
 		app.curFunction = 'loadHome';
 	
@@ -297,6 +316,22 @@ app = {
 		data = {};
 		data.id = user.id;
 		
+		app.parseHome();
+		
+		$('.refresh-btn').unbind('click');
+		$('.refresh-btn').click(function(e) {
+			e.preventDefault();
+			$('.refresh-btn').hide();
+			$('.refreshing-btn').show();
+			app.parseHome();
+		});
+		
+		
+		
+	},
+	
+	parseHome: function() {
+	
 		$.get(app.serverUrl + '?action=getUserStats', data, function(result) {
 		
 			user.private_new = result.getPrivate;
@@ -308,7 +343,7 @@ app = {
 			user.money = result.money;
 			user.prizes_new = result.prizes;
 			user.rejected = user.denied_new;
-			
+
 			$('.mainmenu').find('a').each(function(i, item) {
 				//console.log($(item).attr('rel'));
 				if ($(item).attr('rel') == 'getPrivate') {
@@ -342,7 +377,10 @@ app = {
 			});
 			
 		}, 'jsonp');
-
+			
+		$('.refresh-btn').show();
+		$('.refreshing-btn').hide();
+			
 		$('.mainmenu').find('a').unbind('click');
 		$('.mainmenu').find('a').click(function(e) {
 			$('.tasklist-content').hide();
@@ -437,6 +475,7 @@ app = {
 	},
 	
 	loadTasks: function() {
+		$('.refresh-btn').hide();
 		$('.dir-btn').hide();
 		$('.list-btn').hide();
 		
@@ -762,6 +801,9 @@ app = {
 	},
 	
 	startTask: function() {
+	
+		$('.dir-btn').hide();
+	
 		app.curFunction = 'startTask';
 		$('.back-btn').unbind('click');
 		$('.back-btn').click(function(e) {
@@ -1049,7 +1091,9 @@ app = {
 					alert('Asukohas!!!');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
-					setTimeout(app.checkTracking(), 10000);
+					setTimeout(function() {
+						app.checkTracking();
+					}, 10000);
 				}
 				
 			});
@@ -1070,6 +1114,24 @@ app = {
 			//start auto tracking user :) muahaha..
 			
 		}, 'jsonp');
+		
+	},
+	
+	trackUser: function() {
+		//console.log('tracked!!');
+		if (navigator.geolocation) {
+
+			navigator.geolocation.getCurrentPosition(function(position) {	
+				app.position = position;
+				
+				app.updateUser();
+					
+			});
+		}
+		
+		setTimeout(function() {
+			app.trackUser();
+		}, 60000);
 		
 	},
 	

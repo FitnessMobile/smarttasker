@@ -206,6 +206,28 @@ textarea {
 	background:url(../images/list-icon.png) no-repeat center 50%;
 }
 
+.header .refresh-btn {
+	text-indent: -999em;
+	display: none;
+	right: 18px;
+	top: 8px;
+	position: absolute;
+	height: 16px;
+	width: 16px;
+	background:url(../images/refresh.png) no-repeat center 50%;
+}
+
+.header .refreshing-btn {
+	text-indent: -999em;
+	display: none;
+	right: 18px;
+	top: 8px;
+	position: absolute;
+	height: 16px;
+	width: 16px;
+	background:url(../images/refreshing.gif) no-repeat center 50%;
+}
+
 /* CONTENT */
 
 .content {
@@ -298,7 +320,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 
 /* Main page */
 
- .mainmenu {
+.mainmenu {
 	margin:0;
 	padding:0;
 }
