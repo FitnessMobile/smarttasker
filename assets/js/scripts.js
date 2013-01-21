@@ -178,7 +178,7 @@ app = {
 			}
 
 			if(error == false) {
-				if ($('#keepLoggedIn:checked')) {
+				if ($('#keepLoggedIn').is(':checked')) {
 					localStorage.setItem('mail', $('#mail').val());
 					localStorage.setItem('password', $('#password').val());
 				} else {
@@ -449,7 +449,9 @@ app = {
 			$('#profile_firstname').val(user.firstname);
 			$('#profile_lastname').val(user.lastname);
 			$('#profile_mail').val(user.mail);
-			
+			if(user.bank == 'undefined' || !user.bank)
+				user.bank = '';
+				
 			$('#profile_bank').val(user.bank);
 			
 			if(user.sex == 'female') {
@@ -513,11 +515,17 @@ app = {
 						$('.map-btn').show();
 						
 						locations = [];
-							
+						
+						var latlngbounds = new google.maps.LatLngBounds();
+
+						
 						$.each(results, function(i, item) {
-							
-							locations[i] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
-							
+							if(item.address) {
+								locations[i] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
+								var n = new google.maps.LatLng(item.latitude, item.longitude);
+								latlngbounds.extend(n);
+							}
+
 							template = $('.tasklist').find('.task-prize-template');
 							template.find('a').attr('rel', item.id);
 							template.find('.task-name').html(item.name);
@@ -546,7 +554,10 @@ app = {
 							
 							$('.tasklist-content').append(template.html());
 							if(item.prize_type == 'cash') {
-								$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
+								if(item.is_public)
+									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
+								else
+									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
 							} else {
 								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="25" height="25">');
 							}
@@ -584,8 +595,17 @@ app = {
 								    map: map
 								});
 								var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+								
+								latlngbounds.extend(me);
+								map.setCenter(latlngbounds.getCenter());
+								map.fitBounds(latlngbounds); 
+								
 								myloc.setPosition(me);
 							}, 200);
+							
+							
+							
+							
 							
 						});
 						$('.list-btn').unbind('click');
@@ -738,55 +758,67 @@ app = {
 			var directionsService = new google.maps.DirectionsService();
 			
 			setTimeout(function() {
-			
-				$('.dir-btn').show();
-			
-				directionsDisplay = new google.maps.DirectionsRenderer();
-				var currentLoc = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
-				var destination = new google.maps.LatLng(item.latitude, item.longitude);
-				
-				var mapOptions = {
-					zoom: 15,
-					center: new google.maps.LatLng(item.latitude, item.longitude),
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				}
-				var map = new google.maps.Map(document.getElementById("taskMap"), mapOptions);
-				directionsDisplay.setMap(map);
-				
-				setTimeout(function() {
-					var myloc = new google.maps.Marker({
-					    clickable: false,
-					    icon: new google.maps.MarkerImage('http://maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-					                                                    new google.maps.Size(22,22),
-					                                                    new google.maps.Point(0,18),
-					                                                    new google.maps.Point(11,11)),
-					    shadow: null,
-					    zIndex: 999,
-					    map: map
+				if(item.address) {
+					$('.dir-btn').show();
+					
+					var latlngbounds = new google.maps.LatLngBounds();
+					
+					directionsDisplay = new google.maps.DirectionsRenderer();
+					var currentLoc = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+					var destination = new google.maps.LatLng(item.latitude, item.longitude);
+					
+					//var n = new google.maps.LatLng(item.latitude, item.longitude);
+					latlngbounds.extend(destination);
+					
+					var mapOptions = {
+						zoom: 15,
+						center: new google.maps.LatLng(item.latitude, item.longitude),
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+					}
+					var map = new google.maps.Map(document.getElementById("taskMap"), mapOptions);
+					directionsDisplay.setMap(map);
+					
+					setTimeout(function() {
+						var myloc = new google.maps.Marker({
+						    clickable: false,
+						    icon: new google.maps.MarkerImage('http://maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+						                                                    new google.maps.Size(22,22),
+						                                                    new google.maps.Point(0,18),
+						                                                    new google.maps.Point(11,11)),
+						    shadow: null,
+						    zIndex: 999,
+						    map: map
+						});
+						var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
+						myloc.setPosition(me);
+						
+						latlngbounds.extend(me);
+						map.setCenter(latlngbounds.getCenter());
+						map.fitBounds(latlngbounds); 
+						
+					}, 200);
+					
+					locations = [];
+					locations[0] = [item.name, item.latitude, item.longitude, item.id];
+					
+					setMarkers(map, locations);
+					
+					$('.dir-btn').click(function() {
+						
+					  var request = {
+					    origin:currentLoc,
+					    destination:destination,
+					    travelMode: google.maps.TravelMode.DRIVING
+					  };
+					  directionsService.route(request, function(result, status) {
+					    if (status == google.maps.DirectionsStatus.OK) {
+					      directionsDisplay.setDirections(result);
+					    }
+					  });
+						
 					});
-					var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
-					myloc.setPosition(me);
-				}, 200);
 				
-				locations = [];
-				locations[0] = [item.name, item.latitude, item.longitude, item.id];
-				
-				setMarkers(map, locations);
-				
-				$('.dir-btn').click(function() {
-					
-				  var request = {
-				    origin:currentLoc,
-				    destination:destination,
-				    travelMode: google.maps.TravelMode.DRIVING
-				  };
-				  directionsService.route(request, function(result, status) {
-				    if (status == google.maps.DirectionsStatus.OK) {
-				      directionsDisplay.setDirections(result);
-				    }
-				  });
-					
-				});
+				}
 				
 			}, 200);
 		
@@ -1079,14 +1111,16 @@ app = {
 
 	},
 	checkTracking: function() {
+		//alert('checking..');
 		app.curFunction = 'checkTracking';
 		if (navigator.geolocation) {
-
+			
 			navigator.geolocation.getCurrentPosition(function(position) {
-
+				//console.log(sub_tasks[app.currentSub]);
 				app.position = position;
 				app.updateUser();
 				distance = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
+				//console.log(distance);
 				if (distance < 50) {
 					alert('Asukohas!!!');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
@@ -1224,6 +1258,8 @@ function postToFacebook(image_id, name, description) {
 		params['picture'] = "http://projects.efley.ee/smarttasker/pictures/" + image_id + ".jpg";
 		params['caption'] = name;
 
+		console.log(params);
+
 	// When you're ready send you request off to be processed!
 	Facebook.post(_fbType,params);	
 }
@@ -1263,8 +1299,6 @@ function setMarkers(map, locations) {
 		}
 		
 	}
-  
-	
   
 }
 
