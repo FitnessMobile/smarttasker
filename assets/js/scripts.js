@@ -412,7 +412,8 @@ app = {
 			$('#stats_accepted').html(user.accepted);
 			$('#stats_done').html(user.done);
 			$('#stats_rejected').html(user.denied_new);
-			$('#stats_money').html(user.money);
+			alert('wdf');
+			$('#stats_money').html(user.money + '€');
 			$('#stats_prizes').html(user.prizes_new);
 		} else if (app.tasksType == 'getPrizes') {
 			$('.prizes-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
@@ -554,10 +555,11 @@ app = {
 							
 							$('.tasklist-content').append(template.html());
 							if(item.prize_type == 'cash') {
-								if(item.is_public)
+								if(item.is_public && item.is_public != '0') {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
-								else
+								} else {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
+								}
 							} else {
 								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="25" height="25">');
 							}
@@ -602,11 +604,7 @@ app = {
 								
 								myloc.setPosition(me);
 							}, 200);
-							
-							
-							
-							
-							
+
 						});
 						$('.list-btn').unbind('click');
 						$('.list-btn').click(function() {
@@ -697,7 +695,11 @@ app = {
 			}*/
 			
 			if(item.prize_type == 'cash') {
-				$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
+				if(item.is_public && item.is_public != '0') {
+					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
+				} else {
+					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
+				}
 			} else {
 				$('.detailed-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="43" height="43">');
 			}
