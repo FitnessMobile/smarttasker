@@ -1221,6 +1221,11 @@ app = {
 
 function distance(lat1, lat2, lon1, lon2) {
 	
+	lat1 = parseFloat(lat1);
+	lat2 = parseFloat(lat2);
+	lon1 = parseFloat(lon1);
+	lon2 = parseFloat(lon2);
+	
 	var R = 6371; // km
 	var dLat = (lat2-lat1).toRad();
 	var dLon = (lon2-lon1).toRad();
@@ -1252,7 +1257,7 @@ function postToFacebook(image_id, name, description) {
 	// You can change
 
 	var params = {};
-		params['message'] = 'Lahendasin just ülesande!';
+		params['message'] = 'Lahendasin just &uuml;lesande!';
 		params['name'] = 'SmartTasker';
 		params['description'] = description;
 		params['_link'] = "http://www.smarttasker.ee";
