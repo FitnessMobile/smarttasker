@@ -20,7 +20,7 @@
     
     <access origin="*" />
     
-    <preference name="phonegap-version" value="2.3.0" />
+    <preference name="phonegap-version" value="2.2.0" />
     <preference name="orientation"      value="portrait" />
     <preference name="target-device"    value="handset" />
     <preference name="fullscreen"       value="false" />
@@ -43,8 +43,11 @@
     <gap:splash src="assets/splash/android/screen-hdpi-portrait.png"  gap:platform="android" gap:density="hdpi" />
     <gap:splash src="assets/splash/android/screen-xhdpi-portrait.png" gap:platform="android" gap:density="xhdpi" />
 
-    <gap:splash src="assets/splash/ios/screen-iphone-portrait.png"    gap:platform="ios"     width="320" height="480" />
-    <gap:splash src="assets/splash/ios/screen-iphone-portrait-2x.png" gap:platform="ios"     width="640" height="960" />
+    <gap:splash src="assets/splash/ios/screen-iphone-portrait.png"    	gap:platform="ios"	width="320" height="480" />
+    <gap:splash src="assets/splash/ios/screen-iphone-portrait-2x.png" 	gap:platform="ios"	width="640" height="960" />
+    <gap:splash src="assets/splash/ios/screen-iphone-portrait-2x.png" 	gap:platform="ios"	width="640" height="960" />
+    <gap:splash src="assets/splash/ios/Default-568h@2x.png" 			gap:platform="ios"	width="640" height="1136"/ >
+    
     <gap:splash src="assets/splash/ios/screen-ipad-portrait.png"      gap:platform="ios"     width="768" height="1024" />
     <gap:splash src="assets/splash/ios/screen-ipad-landscape.png"     gap:platform="ios"     width="1024" height="768" />
     
