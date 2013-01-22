@@ -1120,9 +1120,10 @@ app = {
 				//console.log(sub_tasks[app.currentSub]);
 				app.position = position;
 				app.updateUser();
-				distance = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
-				console.log(distance);
-				if (distance < 50) {
+				console.log(position.coords.latitude + ', ' + sub_tasks[app.currentSub].lat + ', ' + position.coords.longitude + ', ' + sub_tasks[app.currentSub].long);
+				var dist = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
+				console.log(dist);
+				if (dist < 50) {
 					alert('Asukohas!!!');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
@@ -1229,8 +1230,8 @@ function distance(lat1, lat2, lon1, lon2) {
 	var R = 6371; // km
 	var dLat = (lat2-lat1).toRad();
 	var dLon = (lon2-lon1).toRad();
-	var lat1 = lat1.toRad();
-	var lat2 = lat2.toRad();
+	lat1 = lat1.toRad();
+	lat2 = lat2.toRad();
 	
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
 	        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
