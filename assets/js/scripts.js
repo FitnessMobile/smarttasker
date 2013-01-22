@@ -412,7 +412,7 @@ app = {
 			$('#stats_accepted').html(user.accepted);
 			$('#stats_done').html(user.done);
 			$('#stats_rejected').html(user.denied_new);
-			alert('wdf');
+			//alert('wdf');
 			$('#stats_money').html(user.money + '€');
 			$('#stats_prizes').html(user.prizes_new);
 		} else if (app.tasksType == 'getPrizes') {
@@ -663,6 +663,8 @@ app = {
 		
 		$.get(app.serverUrl + '?action=getTask', data, function(item) {
 			
+			task = item;
+			
 			$('.detailed-content').html('');
 			$('.started-content').html('<h3>Puuduvad ülesanded</h3>');
 			
@@ -784,9 +786,9 @@ app = {
 						var myloc = new google.maps.Marker({
 						    clickable: false,
 						    icon: new google.maps.MarkerImage('http://maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
-						                                                    new google.maps.Size(22,22),
-						                                                    new google.maps.Point(0,18),
-						                                                    new google.maps.Point(11,11)),
+	                            new google.maps.Size(22,22),
+	                            new google.maps.Point(0,18),
+	                            new google.maps.Point(11,11)),
 						    shadow: null,
 						    zIndex: 999,
 						    map: map
@@ -829,9 +831,6 @@ app = {
 		$('.logged-in').attr('id', 'taskView');
 		$('.logged-in').find('h2').html('Tegevus');
 			
-		
-		
-		
 	},
 	
 	startTask: function() {
@@ -1122,7 +1121,7 @@ app = {
 				app.position = position;
 				app.updateUser();
 				distance = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
-				//console.log(distance);
+				console.log(distance);
 				if (distance < 50) {
 					alert('Asukohas!!!');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
@@ -1377,7 +1376,10 @@ function uploadFile(mediaFile) {
 							$('.pic').find('.ajax-loader').remove();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
-								postToFacebook(parseInt(result.response), tasks[app.currentTask].name, sub_tasks[app.currentSub].description);
+								console.log('what');
+								console.log(task);
+								console.log(result.response);
+								postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description);
 								$('.sub-content').find('.confirmTask').removeClass('disabled');
 							} else {
 								app.finishedTask = u_sub_task;
@@ -1415,7 +1417,7 @@ function uploadFile2(mediaFile, user, task, sub_task) {
 			if (response.success == true) {
 		
 				if (sub_tasks[sub_task].type == 'pic_fb') {
-					postToFacebook(response.id, tasks[app.currentTask].name, sub_tasks[app.currentSub].description);
+					postToFacebook(response.id, task.name, sub_tasks[app.currentSub].description);
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
 					app.finishedTask = sub_task;
