@@ -479,6 +479,9 @@ app = {
 	},
 	
 	loadTasks: function() {
+	
+		has_map = false;
+	
 		$('.refresh-btn').hide();
 		$('.dir-btn').hide();
 		$('.list-btn').hide();
@@ -523,7 +526,7 @@ app = {
 						j = 0;
 						$.each(results, function(i, item) {
 							if(item.address) {
-								
+								has_map = true;
 								locations[j] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
 								var n = new google.maps.LatLng(item.latitude, item.longitude);
 								latlngbounds.extend(n);
@@ -567,6 +570,12 @@ app = {
 								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="25" height="25">');
 							}
 						});
+						
+						if (has_map)
+							$('.map-btn').show();
+						else
+							$('.map-btn').hide();
+						
 						$('.map-btn').unbind('click');
 						$('.map-btn').click(function() {
 							console.log(locations);
@@ -1245,7 +1254,7 @@ function distance(lat1, lat2, lon1, lon2) {
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 	var d = (R * c)*1000;
 	
-	return d;
+	return Math.round(d);
 	
 }
 
@@ -1267,7 +1276,7 @@ function postToFacebook(image_id, name, description) {
 	// You can change
 
 	var params = {};
-		params['message'] = 'Lahendasin just &uuml;lesande!';
+		params['message'] = 'Lahendasin just ülesande!';
 		params['name'] = 'SmartTasker';
 		params['description'] = description;
 		params['_link'] = "http://www.smarttasker.ee";
@@ -1296,11 +1305,12 @@ function errorHandler(e) {
 //Google maps stuff
 function setMarkers(map, locations) {
 	//console.log(locations);
+	var marker = {};
 	for (var i = 0; i < locations.length; i++) {
 		var location = locations[i];
 		var myLatLng = new google.maps.LatLng(location[1], location[2]);
 	
-		var marker = new google.maps.Marker({
+		marker = new google.maps.Marker({
 	   		position: myLatLng,
 	    	map: map,
 	    	title: location[0],
@@ -1309,6 +1319,7 @@ function setMarkers(map, locations) {
 		});
 		if(location[4] == 'tasks') {
 			google.maps.event.addListener(marker, 'click', function() {
+				console.log('marker: ' + location[3]);
 				app.currentTask = location[3];
 				app.navigate('task.html', 'loadTask');
 			});
