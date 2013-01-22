@@ -20,6 +20,7 @@ var homeLoaded = false;
 var timer1 = {};
 var db = {};
 var data = {};
+var trackingTimer;
 
 //var facebook = forge.facebook;
 //var flurry = forge.flurry;
@@ -519,12 +520,14 @@ app = {
 						
 						var latlngbounds = new google.maps.LatLngBounds();
 
-						
+						j = 0;
 						$.each(results, function(i, item) {
 							if(item.address) {
-								locations[i] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
+								
+								locations[j] = [item.name, item.latitude, item.longitude, item.id, 'tasks', i];
 								var n = new google.maps.LatLng(item.latitude, item.longitude);
 								latlngbounds.extend(n);
+								j++;
 							}
 
 							template = $('.tasklist').find('.task-prize-template');
@@ -566,7 +569,7 @@ app = {
 						});
 						$('.map-btn').unbind('click');
 						$('.map-btn').click(function() {
-						
+							console.log(locations);
 							app.mapView = true;
 						
 							$('.list-btn').show();
@@ -834,7 +837,10 @@ app = {
 	},
 	
 	startTask: function() {
-	
+		
+		if (trackingTimer)
+			clearTimeout(trackingTimer);
+		
 		$('.dir-btn').hide();
 	
 		app.curFunction = 'startTask';
@@ -1123,11 +1129,12 @@ app = {
 				console.log(position.coords.latitude + ', ' + sub_tasks[app.currentSub].lat + ', ' + position.coords.longitude + ', ' + sub_tasks[app.currentSub].long);
 				var dist = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
 				console.log(dist);
+				$('#current_distance').html(dist);
 				if (dist < 50) {
-					alert('Asukohas!!!');
+					console.log('asukohas');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
-					setTimeout(function() {
+					trackingTimer = setTimeout(function() {
 						app.checkTracking();
 					}, 10000);
 				}
@@ -1236,7 +1243,9 @@ function distance(lat1, lat2, lon1, lon2) {
 	var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
 	        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
 	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-	var d = (R * c)/1000;
+	var d = (R * c)*1000;
+	
+	return d;
 	
 }
 
