@@ -1304,29 +1304,29 @@ function errorHandler(e) {
 
 //Google maps stuff
 function setMarkers(map, locations) {
-	//console.log(locations);
-	var marker = {};
 	for (var i = 0; i < locations.length; i++) {
 		var location = locations[i];
-		var myLatLng = new google.maps.LatLng(location[1], location[2]);
-	
-		marker = new google.maps.Marker({
-	   		position: myLatLng,
-	    	map: map,
-	    	title: location[0],
-	    	id: location[3],
-	    	zIndex: location[5]
-		});
-		if(location[4] == 'tasks') {
-			google.maps.event.addListener(marker, 'click', function() {
-				console.log('marker: ' + location[3]);
-				app.currentTask = location[3];
-				app.navigate('task.html', 'loadTask');
-			});
-		}
-		
+		setMarker(map, location);
 	}
-  
+}
+function setMarker(map, location) {
+	
+	var myLatLng = new google.maps.LatLng(location[1], location[2]);
+	
+	var marker = new google.maps.Marker({
+	   	position: myLatLng,
+	    map: map,
+	    title: location[0],
+	    id: location[3],
+	    zIndex: location[5]
+	});
+	if(location[4] == 'tasks') {
+		google.maps.event.addListener(marker, 'click', function() {
+			console.log('marker: ' + location[3]);
+			app.currentTask = location[3];
+			app.navigate('task.html', 'loadTask');
+		});
+	}
 }
 
 // Called when capture operation is finished
