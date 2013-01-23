@@ -55,7 +55,8 @@ app = {
 	navigated: false,
 	profileToLoad: false,
 	position: {},
-	serverUrl: 'http://projects.efley.ee/smarttasker/server.php',
+	//serverUrl: 'http://projects.efley.ee/smarttasker/server.php',
+	serverUrl: 'http://www.smarttasker.com/app/server.php',
 	curFunction: 'init',
 	mapView: false, 
 	
@@ -426,7 +427,7 @@ app = {
 				if(result.length) {
 					$.each(result, function(i, item) {
 						template = $('.task-prize-template');
-						template.find('.prize-thumb').attr('src', 'http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg');
+						template.find('.prize-thumb').attr('src', 'http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg');
 						template.find('.task-name').html(item.name);
 						template.find('.distance').html(item.distance);
 						template.find('.distance-value').html(item.distance_value);
@@ -567,7 +568,7 @@ app = {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
 								}
 							} else {
-								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="25" height="25">');
+								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="25" height="25">');
 							}
 						});
 						
@@ -715,7 +716,7 @@ app = {
 					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
 				}
 			} else {
-				$('.detailed-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://projects.efley.ee/smarttasker/prizes/' + item.id + '.jpg" width="43" height="43">');
+				$('.detailed-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="43" height="43">');
 			}
 			
 			if(item.subs.length) {
@@ -772,19 +773,13 @@ app = {
 			//console.log(app.position.coords);
 			var directionsDisplay;
 			var directionsService = new google.maps.DirectionsService();
-			
 			setTimeout(function() {
 				if(item.address) {
 					$('.dir-btn').show();
-					
 					var latlngbounds = new google.maps.LatLngBounds();
-					
 					directionsDisplay = new google.maps.DirectionsRenderer();
 					var currentLoc = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
 					var destination = new google.maps.LatLng(item.latitude, item.longitude);
-					
-					//var n = new google.maps.LatLng(item.latitude, item.longitude);
-					latlngbounds.extend(destination);
 					
 					var mapOptions = {
 						zoom: 15,
@@ -793,6 +788,22 @@ app = {
 					}
 					var map = new google.maps.Map(document.getElementById("taskMap"), mapOptions);
 					directionsDisplay.setMap(map);
+
+					locations = [];
+					waypoints = [];
+					console.log(item.is_tracking);
+					if(item.is_tracking) {
+						$.each(item.subs, function(i, sub){
+							console.log(sub);
+							locations[i] = [sub.name, sub.lat, sub.long, sub.id];
+							mark = new google.maps.LatLng(sub.lat, sub.long);
+							waypoints[i] = {location: mark, stopover: false};
+							latlngbounds.extend(mark);
+						});
+					} else {
+						locations[0] = [item.name, item.latitude, item.longitude, item.id];
+						latlngbounds.extend(destination);
+					}
 					
 					setTimeout(function() {
 						var myloc = new google.maps.Marker({
@@ -807,23 +818,18 @@ app = {
 						});
 						var me = new google.maps.LatLng(app.position.coords.latitude, app.position.coords.longitude);
 						myloc.setPosition(me);
-						
 						latlngbounds.extend(me);
 						map.setCenter(latlngbounds.getCenter());
 						map.fitBounds(latlngbounds); 
-						
 					}, 200);
 					
-					locations = [];
-					locations[0] = [item.name, item.latitude, item.longitude, item.id];
-					
 					setMarkers(map, locations);
-					
 					$('.dir-btn').click(function() {
-						
 					  var request = {
 					    origin:currentLoc,
 					    destination:destination,
+					    waypoints:waypoints,
+					    optimizeWaypoints: true,
 					    travelMode: google.maps.TravelMode.DRIVING
 					  };
 					  directionsService.route(request, function(result, status) {
@@ -833,7 +839,6 @@ app = {
 					  });
 						
 					});
-				
 				}
 				
 			}, 200);
@@ -846,9 +851,6 @@ app = {
 	},
 	
 	startTask: function() {
-		
-		if (trackingTimer)
-			clearTimeout(trackingTimer);
 		
 		$('.dir-btn').hide();
 	
@@ -942,6 +944,10 @@ app = {
 	},
 	
 	loadSub: function() {
+	
+		if (trackingTimer)
+			clearTimeout(trackingTimer);
+	
 		app.curFunction = 'loadSub';
 		$('.captured-image').hide();
 		
@@ -956,6 +962,7 @@ app = {
 			
 			e.preventDefault();
 			navigator.notification.confirm('Tagasi minnes kaotad siinse info, oled kindel?', function(button) {
+				button = 1;
 				if(button == 1)
 					app.navigate('task.html', 'startTask');
 			}, 'Teade', 'Ok, Tühista');
@@ -1103,6 +1110,8 @@ app = {
 					$('.options').find('input:checked').each(function(i, value) {
 						data.answer = data.answer + $(this).val() + ', ';
 					});
+				} else {
+					data.answer = 'jah';
 				}
 				
 				if ($(this).hasClass('disabled')) {
@@ -1132,15 +1141,11 @@ app = {
 		if (navigator.geolocation) {
 			
 			navigator.geolocation.getCurrentPosition(function(position) {
-				//console.log(sub_tasks[app.currentSub]);
 				app.position = position;
 				app.updateUser();
-				console.log(position.coords.latitude + ', ' + sub_tasks[app.currentSub].lat + ', ' + position.coords.longitude + ', ' + sub_tasks[app.currentSub].long);
 				var dist = distance(position.coords.latitude, sub_tasks[app.currentSub].lat, position.coords.longitude, sub_tasks[app.currentSub].long);
-				console.log(dist);
 				$('#current_distance').html(dist);
 				if (dist < 50) {
-					console.log('asukohas');
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
 				} else {
 					trackingTimer = setTimeout(function() {
@@ -1280,7 +1285,7 @@ function postToFacebook(image_id, name, description) {
 		params['name'] = 'SmartTasker';
 		params['description'] = description;
 		params['_link'] = "http://www.smarttasker.ee";
-		params['picture'] = "http://projects.efley.ee/smarttasker/pictures/" + image_id + ".jpg";
+		params['picture'] = "http://www.smarttasker.com/app/pictures/" + image_id + ".jpg";
 		params['caption'] = name;
 
 		console.log(params);

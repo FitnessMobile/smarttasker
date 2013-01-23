@@ -3,10 +3,8 @@ var my_client_id = "405225646214042", // YOUR APP ID
 	my_secret = "7c278bfde3f2f806e8cdf44a3f561844", // YOUR APP SECRET 
 	my_redirect_uri = "https://www.facebook.com/connect/login_success.html", // LEAVE THIS
 	my_type ="user_agent", my_display = "touch"; // LEAVE THIS
- 
 var facebook_token = "fbToken"; // OUR TOKEN KEEPER
 var client_browser;
-
 // FACEBOOK
 var Facebook = {
 	init:function(){
