@@ -1046,6 +1046,7 @@ app = {
 				});
 				break;
 			case 'pic_fb':
+				anotherCaller = true;
 				data.answer = 'jpg';
 				break;
 			case 'question':
@@ -1093,7 +1094,6 @@ app = {
 				*/
 				app.checkTracking();
 				break;
-		
 		}
 
 		if (!anotherCaller) {

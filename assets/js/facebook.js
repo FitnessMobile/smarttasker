@@ -3,8 +3,10 @@ var my_client_id = "405225646214042", // YOUR APP ID
 	my_secret = "7c278bfde3f2f806e8cdf44a3f561844", // YOUR APP SECRET 
 	my_redirect_uri = "https://www.facebook.com/connect/login_success.html", // LEAVE THIS
 	my_type ="user_agent", my_display = "touch"; // LEAVE THIS
+ 
 var facebook_token = "fbToken"; // OUR TOKEN KEEPER
 var client_browser;
+
 // FACEBOOK
 var Facebook = {
 	init:function(){
@@ -68,7 +70,15 @@ var Facebook = {
 		}
 	},
 	request:function(url){
- 
+		
+		console.log(url);
+		
+		$.ajax({
+	        type: 'POST',
+	        url: url,
+	    });
+	
+		
 		// Create our request and open the connection
 		var req = new XMLHttpRequest(); 
 		req.open("POST", url, true);
@@ -95,6 +105,8 @@ var Facebook = {
 			window.plugins.childBrowser.showWebPage(authorize_url, { showLocationBar: false });
 			
 		} else {
+			
+			console.log(params);
 			
 			var url = 'https://graph.facebook.com/me/'+_fbType+'?access_token='+localStorage.getItem(facebook_token);
 			for(var key in params){
