@@ -71,14 +71,6 @@ var Facebook = {
 	},
 	request:function(url){
 		
-		console.log(url);
-		
-		$.ajax({
-	        type: 'POST',
-	        url: url,
-	    });
-	
-		
 		// Create our request and open the connection
 		var req = new XMLHttpRequest(); 
 		req.open("POST", url, true);
@@ -111,7 +103,7 @@ var Facebook = {
 			var url = 'https://graph.facebook.com/me/'+_fbType+'?access_token='+localStorage.getItem(facebook_token);
 			for(var key in params){
 				if(key == "message"){
-					url = url+"&"+key+"="+escape(params[key]);
+					url = url+"&"+key+"="+params[key];
 				}
 				else {
 					url = url+"&"+key+"="+encodeURIComponent(params[key]);

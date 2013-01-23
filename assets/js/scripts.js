@@ -327,9 +327,7 @@ app = {
 			$('.refreshing-btn').show();
 			app.parseHome();
 		});
-		
-		
-		
+
 	},
 	
 	parseHome: function() {
@@ -344,7 +342,7 @@ app = {
 			
 			user.money = result.money;
 			user.prizes_new = result.prizes;
-			user.rejected = user.denied_new;
+			user.rejected = result.rejected;
 
 			$('.mainmenu').find('a').each(function(i, item) {
 				//console.log($(item).attr('rel'));
@@ -413,7 +411,7 @@ app = {
 			$('.statistics-content').show();
 			$('#stats_accepted').html(user.accepted);
 			$('#stats_done').html(user.done);
-			$('#stats_rejected').html(user.denied_new);
+			$('#stats_rejected').html(user.rejected);
 			//alert('wdf');
 			$('#stats_money').html(user.money + '€');
 			$('#stats_prizes').html(user.prizes_new);
@@ -429,10 +427,10 @@ app = {
 						template = $('.task-prize-template');
 						template.find('.prize-thumb').attr('src', 'http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg');
 						template.find('.task-name').html(item.name);
-						template.find('.distance').html(item.distance);
+						template.find('.distance-name').html(item.distance_name);
 						template.find('.distance-value').html(item.distance_value);
 						
-						template.find('.deadline').html(item.deadline);
+						template.find('.deadline-name').html(item.deadline_name);
 						template.find('.time-left').html(item.time_left);
 						
 						$('.prizes-content').prepend(template.html());
@@ -825,13 +823,21 @@ app = {
 					
 					setMarkers(map, locations);
 					$('.dir-btn').click(function() {
-					  var request = {
-					    origin:currentLoc,
-					    destination:destination,
-					    waypoints:waypoints,
-					    optimizeWaypoints: true,
-					    travelMode: google.maps.TravelMode.DRIVING
-					  };
+					if(item.is_tracking) {
+						var request = {
+						    origin:currentLoc,
+						    destination:destination,
+						    waypoints:waypoints,
+						    optimizeWaypoints: true,
+						    travelMode: google.maps.TravelMode.DRIVING
+					    };
+					} else {
+						var request = {
+						    origin:currentLoc,
+						    destination:destination,
+						    travelMode: google.maps.TravelMode.DRIVING
+						};
+					}
 					  directionsService.route(request, function(result, status) {
 					    if (status == google.maps.DirectionsStatus.OK) {
 					      directionsDisplay.setDirections(result);
