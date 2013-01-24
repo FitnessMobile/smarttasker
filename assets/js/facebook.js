@@ -103,7 +103,7 @@ var Facebook = {
 			var url = 'https://graph.facebook.com/me/'+_fbType+'?access_token='+localStorage.getItem(facebook_token);
 			for(var key in params){
 				if(key == "message"){
-					url = url+"&"+key+"="+params[key];
+					url = url+"&message=Lahendasin%20just%20%C3%BClesande!";
 				}
 				else {
 					url = url+"&"+key+"="+encodeURIComponent(params[key]);

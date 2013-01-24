@@ -790,7 +790,7 @@ app = {
 					locations = [];
 					waypoints = [];
 					console.log(item.is_tracking);
-					if(item.is_tracking) {
+					if(item.is_tracking && item.is_tracking != '0') {
 						$.each(item.subs, function(i, sub){
 							console.log(sub);
 							locations[i] = [sub.name, sub.lat, sub.long, sub.id];
@@ -1053,7 +1053,6 @@ app = {
 				break;
 			case 'pic_fb':
 				anotherCaller = true;
-				data.answer = 'jpg';
 				break;
 			case 'question':
 				$('#subAnswer').keyup(function() {
@@ -1413,11 +1412,13 @@ function uploadFile(mediaFile) {
 							$('.pic').find('.ajax-loader').remove();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
-								console.log('what');
-								console.log(task);
-								console.log(result.response);
 								postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description);
 								$('.sub-content').find('.confirmTask').removeClass('disabled');
+								$('.sub-content').find('.confirmTask').unbind('click');
+								$('.sub-content').find('.confirmTask').click(function() {
+									app.finishedTask = u_sub_task;
+									app.navigate('task.html', 'startTask');
+								});
 							} else {
 								app.finishedTask = u_sub_task;
 								app.navigate('task.html', 'startTask');
