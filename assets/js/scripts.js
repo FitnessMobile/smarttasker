@@ -802,7 +802,7 @@ app = {
 						locations[0] = [item.name, item.latitude, item.longitude, item.id];
 						latlngbounds.extend(destination);
 					}
-					
+					console.log(locations);
 					setTimeout(function() {
 						var myloc = new google.maps.Marker({
 						    clickable: false,
