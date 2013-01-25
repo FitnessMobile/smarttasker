@@ -1,6 +1,5 @@
 var app = {};
 var stats = {};
-
 var user = {};
 var task = {};
 var sub_tasks = {};
@@ -9,7 +8,6 @@ var timer1 = {};
 var db = {};
 var data = {};
 var trackingTimer;
-
 var facebook = {};
 var flurry = {};
 
