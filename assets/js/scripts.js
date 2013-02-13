@@ -1386,8 +1386,8 @@ function uploadFile(mediaFile) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 
 			app.position = position;
-    
-		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + ;
+			pic_answer = $('#picAnswer').val();
+		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + pic_answer;
 		    //console.log(path);
 		    //console.log(upload_url);
 		    
