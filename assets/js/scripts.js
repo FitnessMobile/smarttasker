@@ -1,6 +1,5 @@
 var app = {};
 var stats = {};
-
 var user = {};
 var task = {};
 var sub_tasks = {};
@@ -9,9 +8,6 @@ var timer1 = {};
 var db = {};
 var data = {};
 var trackingTimer;
-
-var facebook = {};
-var flurry = {};
 
 window.onerror = function (msg, url, line) {
 	if (window.device.platform != 'Generic') {
@@ -41,6 +37,7 @@ app = {
 	serverUrl: 'http://www.smarttasker.com/app/server.php',
 	curFunction: 'init',
 	mapView: false, 
+	isOneAnswer: false,
 	
 	init: function() {
 
@@ -295,7 +292,7 @@ app = {
 		
 		app.curFunction = 'loadHome';
 	
-		$('header').find('h1').html('Kodu');
+		$('.logged-in').find('h2').html('Peamenüü');
 		
 		data = {};
 		data.id = user.id;
@@ -381,6 +378,7 @@ app = {
 	},
 	
 	loadCustom: function() {
+		$('.refresh-btn').show();
 		
 		app.curFunction = 'loadCustom';
 		
@@ -390,6 +388,7 @@ app = {
 			app.navigate('home.html', 'loadHome');
 		});
 		if (app.tasksType == 'getStats') {
+			$('.logged-in').find('h2').html('Statistika');
 			$('.statistics-content').show();
 			$('#stats_accepted').html(user.accepted);
 			$('#stats_done').html(user.done);
@@ -398,6 +397,7 @@ app = {
 			$('#stats_money').html(user.money + '€');
 			$('#stats_prizes').html(user.prizes_new);
 		} else if (app.tasksType == 'getPrizes') {
+			$('.logged-in').find('h2').html('Auhinnad');
 			$('.prizes-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
 			$('.prizes-content').show();
 			data = {};
@@ -406,7 +406,7 @@ app = {
 				$('.prizes-content').html('');
 				if(result.length) {
 					$.each(result, function(i, item) {
-						template = $('.task-prize-template');
+						template = $('.prizes-prize-template');
 						template.find('.prize-thumb').attr('src', 'http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg');
 						template.find('.task-name').html(item.name);
 						template.find('.distance-name').html(item.distance_name);
@@ -425,6 +425,7 @@ app = {
 			}, 'jsonp');
 			
 		} else if (app.tasksType == 'getProfile') {
+			$('.logged-in').find('h2').html('Profiil');
 			if (user.company_id) {
 				$('#profile_password').show();
 			}
@@ -738,7 +739,17 @@ app = {
 					
 					$.get(app.serverUrl + '?action=startTask', data, function(result) {
 						if (result.success) {
-							app.startTask();
+						
+							if (item.subs.length > 1) {
+								app.startTask();
+								app.isOneAnswer = false;
+							} else {
+								app.isOneAnswer = true;
+								app.currentSub = item.subs[0].id;
+								app.navigate('sub.html', 'loadSub');
+							}
+						
+							
 							user.accepted = parseInt(user.accepted) + 1;
 							app.updateUser();
 						} else {
@@ -1376,7 +1387,7 @@ function uploadFile(mediaFile) {
 
 			app.position = position;
     
-		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude;
+		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + ;
 		    //console.log(path);
 		    //console.log(upload_url);
 		    
@@ -1399,6 +1410,22 @@ function uploadFile(mediaFile) {
 									app.navigate('task.html', 'startTask');
 								});
 							} else {
+								if (isOneAnswer) {
+									$.get(app.serverUrl + '?action=finishTask', data, function(result) {
+										if (result.success) {
+											if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
+												navigator.notification.alert('Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt', null, 'Teade!');
+												user.done = parseInt(user.done) + 1;
+												app.updateUser();
+										
+											app.navigate('home.html', 'loadHome');
+										} else {
+											alert('Midagi läks valesti serveris, proovi uuesti.');
+										}
+										//start auto tracking user :) muahaha..
+										
+									}, 'jsonp');
+								}
 								app.finishedTask = u_sub_task;
 								app.navigate('task.html', 'startTask');
 							}
