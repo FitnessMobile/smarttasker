@@ -378,7 +378,7 @@ app = {
 	},
 	
 	loadCustom: function() {
-		$('.refresh-btn').show();
+		$('.refresh-btn').hide();
 		
 		app.curFunction = 'loadCustom';
 		
@@ -543,7 +543,7 @@ app = {
 							
 							$('.tasklist-content').append(template.html());
 							if(item.prize_type == 'cash') {
-								if(item.is_public && item.is_public != '0') {
+								if(item.is_public && item.is_public != '0' && item.prize_sum != '0') {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
 								} else {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
@@ -691,7 +691,7 @@ app = {
 			}*/
 			
 			if(item.prize_type == 'cash') {
-				if(item.is_public && item.is_public != '0') {
+				if(item.is_public && item.is_public != '0' && item.prize_sum != '0') {
 					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">' + item.prize_sum + '€</strong>');
 				} else {
 					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
@@ -702,7 +702,7 @@ app = {
 			
 			if(item.subs.length) {
 				$('.started-content').html('');
-				$.each(item.subs, function(i, sub){
+				$.each(item.subs, function(i, sub) {
 					sub_tasks[sub.id] = sub;
 
 					$('.list').append('<li>' + sub.name + '</li>');
@@ -1363,7 +1363,7 @@ function captureImage() {
 }
 
 // Upload files to server
-function uploadFile(mediaFile) {
+function uploadFile2(mediaFile) {
 	
 	$('.pic_fb').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
 	$('.pic').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
@@ -1436,7 +1436,7 @@ function uploadFile(mediaFile) {
 							$('.pic').find('.ajax-loader').remove();
 		
 							navigator.notification.alert('Serveri poolne viga!', null, 'Teade!');
-							app.deliverError(result.response, '1118');
+							app.deliverError(result, '1118');
 						}
 						
 			        },
@@ -1452,24 +1452,62 @@ function uploadFile(mediaFile) {
 	} 
 }
 
-function uploadFile2(mediaFile, user, task, sub_task) {
-	$.get(app.serverUrl + "?action=uploadPhoto&callback=123&user=" + user + "&task=" + task + "&sub_task=" + sub_task, {}, function(result) {
+function uploadFile(mediaFile) {
+
+	u_user = user.id;
+	u_task = app.currentTask;
+	u_sub_task = app.currentSub;
+	pic_answer = $('#picAnswer').val();
+	
+	if (navigator.geolocation) {
+
+	navigator.geolocation.getCurrentPosition(function(position) {
+		$.get(app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + pic_answer, {}, function(result) {
 		//$('.sub-content').find('.confirmTask').removeClass('disabled');
-		
-		response = $.parseJSON(result);
-		
-			if (response.success == true) {
-		
+			        	//console.log(result.response);
+			if (parseInt(result)) {
+			
+				$('.pic_fb').find('.ajax-loader').remove();
+				$('.pic').find('.ajax-loader').remove();
+				
 				if (sub_tasks[sub_task].type == 'pic_fb') {
-					postToFacebook(response.id, task.name, sub_tasks[app.currentSub].description);
+					postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description);
 					$('.sub-content').find('.confirmTask').removeClass('disabled');
+					$('.sub-content').find('.confirmTask').unbind('click');
+					$('.sub-content').find('.confirmTask').click(function() {
+						app.finishedTask = u_sub_task;
+						app.navigate('task.html', 'startTask');
+					});
 				} else {
-					app.finishedTask = sub_task;
+					if (isOneAnswer) {
+						$.get(app.serverUrl + '?action=finishTask', data, function(result) {
+							if (result.success) {
+								if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
+									navigator.notification.alert('Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt', null, 'Teade!');
+									user.done = parseInt(user.done) + 1;
+									app.updateUser();
+							
+								app.navigate('home.html', 'loadHome');
+							} else {
+								alert('Midagi läks valesti serveris, proovi uuesti.');
+							}
+							//start auto tracking user :) muahaha..
+							
+						}, 'jsonp');
+					}
+					app.finishedTask = u_sub_task;
 					app.navigate('task.html', 'startTask');
 				}
 				
 			} else {
+				
+				$('.pic_fb').find('.ajax-loader').remove();
+				$('.pic').find('.ajax-loader').remove();
+
 				navigator.notification.alert('Serveri poolne viga!', null, 'Teade!');
+				app.deliverError(result.response, '1118');
 			}
+		});
 	});
+	}
 }
