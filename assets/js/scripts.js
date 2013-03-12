@@ -8,6 +8,159 @@ var timer1 = {};
 var db = {};
 var data = {};
 var trackingTimer;
+var lang = 'et';
+
+var translations = [];
+translations.et = [];
+translations.et['mainmenu'] = 'Peamenüü';
+translations.et['facebook_login'] = 'Facebook login';
+translations.et['or_login_company'] = 'või logi sisse firma alt';
+translations.et['remember_me'] = 'jäta mind meelde';
+translations.et['login'] = 'Logi sisse';
+translations.et['private_tasks'] = 'Kohustuslikud ülesanded';
+translations.et['public_tasks'] = 'Teeni või võida';
+translations.et['unfinished_tasks'] = 'Lõpetamata ülesanded';
+translations.et['rejected_tasks'] = 'Tagasi lükatud ülesanded';
+translations.et['stats'] = 'Statistika';
+translations.et['won_prizes'] = 'Võidetud auhinnad';
+translations.et['profile'] = 'Profiil';
+translations.et['tasks'] = 'Tegevused';
+translations.et['tasks_accepted'] = 'Vastu võetud ülesandeid';
+translations.et['tasks_done'] = 'Täidetud ülesandeid';
+translations.et['tasks_rejected'] = 'Tagasi lükatud ülesandeid';
+translations.et['money_won'] = 'Raha võidetud';
+translations.et['prizes_won'] = 'Auhindu võidetud';
+translations.et['no_prizes_yet'] = 'Auhindu pole veel';
+translations.et['change_your_data'] = 'Muuda oma andmeid';
+translations.et['firstname'] = 'Eesnimi';
+translations.et['lastname'] = 'Perekonna nimi';
+translations.et['account_nr'] = 'Konto number';
+translations.et['mail'] = 'E-mail';
+translations.et['password'] = 'Parool';
+translations.et['sex'] = 'Sugu';
+translations.et['male'] = 'Mees';
+translations.et['female'] = 'Naine';
+translations.et['save'] = 'Salvesta';
+translations.et['prize'] = 'Auhind';
+translations.et['prizes'] = 'Auhinnad';
+translations.et['deadline'] = 'Tähtaeg: ';
+translations.et['distance'] = 'Kaugus: ';
+translations.et['start_task'] = 'Alusta ülesannet';
+translations.et['confirm'] = 'Kinnita';
+translations.et['task_description'] = 'Ülesande kirjeldus';
+translations.et['take_a_pic'] = 'Tee pilt';
+translations.et['post_to_facebook'] = 'Postita facebooki';
+translations.et['choose'] = 'Vali';
+translations.et['comment'] = 'Kommentaar';
+translations.et['have_to_be_distance'] = 'Pead olema 50m raadiuses, hetkel: ';
+
+translations.et['start_task_again'] = 'Alusta uuesti ülesannet';
+translations.et['continue_task'] = 'Jätka ülesannet';
+translations.et['start_task'] = 'Alusta ülesannet';
+translations.et['error_on_server'] = 'Midagi läks valesti serveris, proovi uuesti.';
+translations.et['no_tasks'] = 'Puuduvad ülesanded';
+
+translations.et['insert_account'] = 'Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt';
+
+translations.en = [];
+translations.en['mainmenu'] = 'Mainmenu';
+translations.en['facebook_login'] = 'Facebook login';
+translations.en['or_login_company'] = 'or login as company';
+translations.en['remember_me'] = 'remember me';
+translations.en['login'] = 'Log in';
+translations.en['private_tasks'] = 'Kohustuslikud ülesanded';
+translations.en['public_tasks'] = 'Teeni või võida';
+translations.en['unfinished_tasks'] = 'Lõpetamata ülesanded';
+translations.en['rejected_tasks'] = 'Tagasi lükatud ülesanded';
+translations.en['stats'] = 'Statistika';
+translations.en['won_prizes'] = 'Võidetud auhinnad';
+translations.en['profile'] = 'Profiil';
+translations.en['tasks'] = 'Tegevused';
+translations.en['tasks_accepted'] = 'Vastu võetud ülesandeid';
+translations.en['tasks_done'] = 'Täidetud ülesandeid';
+translations.en['tasks_rejected'] = 'Tagasi lükatud ülesandeid';
+translations.en['money_won'] = 'Raha võidetud';
+translations.en['prizes_won'] = 'Auhindu võidetud';
+translations.en['no_prizes_yet'] = 'Auhindu pole veel';
+translations.en['change_your_data'] = 'Muuda oma andmeid';
+translations.en['firstname'] = 'Eesnimi';
+translations.en['lastname'] = 'Perekonna nimi';
+translations.en['account_nr'] = 'Konto number';
+translations.en['mail'] = 'E-mail';
+translations.en['password'] = 'Parool';
+translations.en['sex'] = 'Sugu';
+translations.en['male'] = 'Mees';
+translations.en['female'] = 'Naine';
+translations.en['save'] = 'Salvesta';
+translations.en['prize'] = 'Auhind';
+translations.en['prizes'] = 'Auhinnad';
+translations.en['deadline'] = 'Deadline: ';
+translations.en['distance'] = 'Distance: ';
+translations.en['start_task'] = 'Alusta ülesannet';
+translations.en['confirm'] = 'Kinnita';
+translations.en['task_description'] = 'Ülesande kirjeldus';
+translations.en['take_a_pic'] = 'Tee pilt';
+translations.en['post_to_facebook'] = 'Postita facebooki';
+translations.en['choose'] = 'Vali';
+translations.en['comment'] = 'Kommentaar';
+translations.en['have_to_be_distance'] = 'Pead olema 50m raadiuses, hetkel: ';
+
+translations.en['start_task_again'] = 'Alusta uuesti ülesannet';
+translations.en['continue_task'] = 'Jätka ülesannet';
+translations.en['start_task'] = 'Alusta ülesannet';
+translations.en['error_on_server'] = 'Midagi läks valesti serveris, proovi uuesti.';
+translations.en['no_tasks'] = 'Puuduvad ülesanded';
+translations.en['insert_account'] = 'Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt';
+
+translations.ru = [];
+translations.ru['mainmenu'] = 'Mainmenu';
+translations.ru['facebook_login'] = 'Facebook login';
+translations.ru['or_login_company'] = 'or login as company';
+translations.ru['remember_me'] = 'remember me';
+translations.ru['login'] = 'Log in';
+translations.ru['private_tasks'] = 'Kohustuslikud ülesanded';
+translations.ru['public_tasks'] = 'Teeni või võida';
+translations.ru['unfinished_tasks'] = 'Lõpetamata ülesanded';
+translations.ru['rejected_tasks'] = 'Tagasi lükatud ülesanded';
+translations.ru['stats'] = 'Statistika';
+translations.ru['won_prizes'] = 'Võidetud auhinnad';
+translations.ru['profile'] = 'Profiil';
+translations.ru['tasks'] = 'Tegevused';
+translations.ru['tasks_accepted'] = 'Vastu võetud ülesandeid';
+translations.ru['tasks_done'] = 'Täidetud ülesandeid';
+translations.ru['tasks_rejected'] = 'Tagasi lükatud ülesandeid';
+translations.ru['money_won'] = 'Raha võidetud';
+translations.ru['prizes_won'] = 'Auhindu võidetud';
+translations.ru['no_prizes_yet'] = 'Auhindu pole veel';
+translations.ru['change_your_data'] = 'Muuda oma andmeid';
+translations.ru['firstname'] = 'Eesnimi';
+translations.ru['lastname'] = 'Perekonna nimi';
+translations.ru['account_nr'] = 'Konto number';
+translations.ru['mail'] = 'E-mail';
+translations.ru['password'] = 'Parool';
+translations.ru['sex'] = 'Sugu';
+translations.ru['male'] = 'Mees';
+translations.ru['female'] = 'Naine';
+translations.ru['save'] = 'Salvesta';
+translations.ru['prize'] = 'Auhind';
+translations.ru['prizes'] = 'Auhinnad';
+translations.ru['deadline'] = 'Deadline: ';
+translations.ru['start_task'] = 'Alusta ülesannet';
+translations.ru['confirm'] = 'Kinnita';
+translations.ru['task_description'] = 'Ülesande kirjeldus';
+translations.ru['take_a_pic'] = 'Tee pilt';
+translations.ru['post_to_facebook'] = 'Postita facebooki';
+translations.ru['choose'] = 'Vali';
+translations.ru['comment'] = 'Kommentaar';
+translations.ru['have_to_be_distance'] = 'Pead olema 50m raadiuses, hetkel: ';
+
+translations.ru['start_task_again'] = 'Alusta uuesti ülesannet';
+translations.ru['continue_task'] = 'Jätka ülesannet';
+translations.ru['start_task'] = 'Alusta ülesannet';
+translations.ru['error_on_server'] = 'Midagi läks valesti serveris, proovi uuesti.';
+translations.ru['no_tasks'] = 'Puuduvad ülesanded';
+translations.ru['insert_account'] = 'Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt';
+
 
 window.onerror = function (msg, url, line) {
 	if (window.device.platform != 'Generic') {
@@ -40,6 +193,13 @@ app = {
 	isOneAnswer: false,
 	
 	init: function() {
+	
+		if (localStorage.getItem('lang')) {
+			lang = localStorage.getItem('lang');
+			$('.' + lang + '-flag').addClass('active');
+		}
+	
+		app.translateApp();
 
 		localStorage.removeItem('user_id');
 		//localStorage.removeItem(facebook_token);
@@ -67,7 +227,28 @@ app = {
 			$('#password').val(localStorage.getItem('password'))
 			$('#keepLoggedIn').attr('checked', 'checked');
 		}
+		$('.flag').unbind('click');
+		$('.flag').click(function(e) {
+			e.preventDefault();
+			$('.flag').removeClass('active');
+			$(this).addClass('active');
+			lang = $(this).attr('rel');
+			localStorage.setItem('lang', lang);
+			app.translateApp();
+		});
 		
+	},
+	
+	translateApp: function() {
+		$('.translate').each(function(i, item) {
+			if ($(this).hasClass('placeholder')) {
+				$(this).attr('placeholder', translations[lang][$(this).data('keyword')]);
+			} else if ($(this).hasClass('value')) {
+				$(this).val(translations[lang][$(this).data('keyword')]);
+			} else {
+				$(this).html(translations[lang][$(this).data('keyword')]);
+			}
+		});	
 	},
 	
 	navigate: function(page, init_function) {
@@ -79,7 +260,7 @@ app = {
 		switch(page) {
 			case 'home.html':
 				$('.logged-in').attr('id', 'mainPage');
-				$('.logged-in').find('h2').html('Menüü');
+				$('.logged-in').find('h2').html(translations[lang]['mainmenu']);
 				$('.back-btn').hide();
 				margin = 100;
 			break;
@@ -292,7 +473,7 @@ app = {
 		
 		app.curFunction = 'loadHome';
 	
-		$('.logged-in').find('h2').html('Peamenüü');
+		$('.logged-in').find('h2').html(translations[lang]['mainmenu']);
 		
 		data = {};
 		data.id = user.id;
@@ -388,7 +569,7 @@ app = {
 			app.navigate('home.html', 'loadHome');
 		});
 		if (app.tasksType == 'getStats') {
-			$('.logged-in').find('h2').html('Statistika');
+			$('.logged-in').find('h2').html(translations[lang]['stats']);
 			$('.statistics-content').show();
 			$('#stats_accepted').html(user.accepted);
 			$('#stats_done').html(user.done);
@@ -397,7 +578,7 @@ app = {
 			$('#stats_money').html(user.money + '€');
 			$('#stats_prizes').html(user.prizes_new);
 		} else if (app.tasksType == 'getPrizes') {
-			$('.logged-in').find('h2').html('Auhinnad');
+			$('.logged-in').find('h2').html(translations[lang]['prizes']);
 			$('.prizes-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
 			$('.prizes-content').show();
 			data = {};
@@ -419,13 +600,13 @@ app = {
 						
 					});
 				} else {
-					$('.prizes-content').html('<h3>Auhinnad puuduvad</h3>');
+					$('.prizes-content').html('<h3>' + translations[lang]['no_prizes'] + '</h3>');
 				}
 			
 			}, 'jsonp');
 			
 		} else if (app.tasksType == 'getProfile') {
-			$('.logged-in').find('h2').html('Profiil');
+			$('.logged-in').find('h2').html(translations[lang]['profile']);
 			if (user.company_id) {
 				$('#profile_password').show();
 			}
@@ -477,7 +658,7 @@ app = {
 		});	
 		
 		$('.logged-in').attr('id', 'tasksListPage');
-		$('.logged-in').find('h2').html('Tegevused');
+		$('.logged-in').find('h2').html(translations[lang]['tasks']);
 		
 		$('.tasklist-content').show();
 		$('.tasklist-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
@@ -549,7 +730,7 @@ app = {
 									$('.tasklist-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
 								}
 							} else {
-								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="25" height="25">');
+								$('.tasklist-content').find('.prize-wrap:last').html('<span class="label">' + translations[lang]['prize'] + '</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="25" height="25">');
 							}
 						});
 						
@@ -615,7 +796,7 @@ app = {
 							$('.map-btn').click();
 						
 					} else {
-						$('.tasklist-content').html('<h3>Ülesanded puuduvad</h3>');
+						$('.tasklist-content').html('<h3>' + translations[lang]['no_tasks'] + '</h3>');
 					}
 					
 					$('.tasklist').find('a').click(function(e) {
@@ -660,7 +841,7 @@ app = {
 			task = item;
 			
 			$('.detailed-content').html('');
-			$('.started-content').html('<h3>Puuduvad ülesanded</h3>');
+			$('.started-content').html('<h3>'+translations[lang]['no_tasks']+'</h3>');
 			
 			$('.logged-in').find('h2').html(item.name);
 
@@ -697,7 +878,7 @@ app = {
 					$('.detailed-content').find('.prize-wrap:last').html('<strong style="font-size:20px;">&nbsp;</strong>');
 				}
 			} else {
-				$('.detailed-content').find('.prize-wrap:last').html('<span class="label">Auhind</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="43" height="43">');
+				$('.detailed-content').find('.prize-wrap:last').html('<span class="label">'+translations[lang]['prize']+'</span><img class="prize-thumb" src="http://www.smarttasker.com/admin/gift_pics/' + item.id + '.jpg" width="43" height="43">');
 			}
 			
 			if(item.subs.length) {
@@ -725,16 +906,26 @@ app = {
 			data.user = user.id;
 			data.task = item.id;
 			
+			
+			
 			if (item.status && item.status != false) {
 				if (item.status == 'rejected')
-					$('.startTask:first').html('Alusta uuesti ülesannet');
+					$('.startTask:first').html(translations[lang]['start_task_again']);
 				else
-					$('.startTask:first').html('Jätka ülesannet');
+					$('.startTask:first').html(translations[lang]['continue_task']);
 				$('.startTask:first').click(function() {
-					app.startTask();
+					//app.startTask();
+					if (item.subs.length > 1) {
+						app.startTask();
+						app.isOneAnswer = false;
+					} else {
+						app.isOneAnswer = true;
+						app.currentSub = item.subs[0].id;
+						app.navigate('sub.html', 'loadSub');
+					}
 				});
 			} else {
-				$('.startTask:first').html('Alusta ülesannet');
+				$('.startTask:first').html(translations[lang]['start_task']);
 				$('.startTask:first').click(function() {
 					
 					$.get(app.serverUrl + '?action=startTask', data, function(result) {
@@ -760,7 +951,9 @@ app = {
 					}, 'jsonp');
 				});
 			}
-
+			
+			
+			
 			//console.log(app.position.coords);
 			var directionsDisplay;
 			var directionsService = new google.maps.DirectionsService();
@@ -845,7 +1038,7 @@ app = {
 		}, 'jsonp');
 		
 		$('.logged-in').attr('id', 'taskView');
-		$('.logged-in').find('h2').html('Tegevus');
+		$('.logged-in').find('h2').html(translations[lang]['task']);
 			
 	},
 	
@@ -866,6 +1059,8 @@ app = {
 		$('.started-content').fadeIn();
 
 		$('.captured-image').attr('src', '').hide();
+		
+		$('#picAnswer').val('');
 
 		var i = 0;
 		
@@ -907,7 +1102,7 @@ app = {
 					
 						app.navigate('home.html', 'loadHome');
 					} else {
-						alert('Midagi läks valesti serveris, proovi uuesti.');
+						alert(translations[lang]['error_on_server']);
 					}
 					//start auto tracking user :) muahaha..
 					
@@ -918,7 +1113,7 @@ app = {
 			$('.confirmTasks').addClass('disabled');
 			$('.confirmTasks').unbind('click');
 			$('.confirmTasks').click(function(e) {
-				navigator.notification.alert('Peate täitma kõik alamülesanded, et kinnitada see ülesanne');
+				navigator.notification.alert(translations[lang]['complete_tasks']);
 			});
 		}
 		
@@ -926,7 +1121,7 @@ app = {
 		$('.started-content').find('a').click(function(e) {
 			if ($(this).hasClass('done')) {
 				app.currentSub = parseInt($(this).attr('rel'));
-				navigator.notification.confirm('Soovid kustutada eelmise vastuse ja uuesti täita ?', function(button) {
+				navigator.notification.confirm(translations[lang]['cancel_last_and_start_over'], function(button) {
 					//console.log('button + ' + button);
 					if(button == 1 || button == 'undefined')
 						app.navigate('sub.html', 'loadSub');
@@ -1363,7 +1558,7 @@ function captureImage() {
 }
 
 // Upload files to server
-function uploadFile2(mediaFile) {
+function uploadFile(mediaFile) {
 	
 	$('.pic_fb').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
 	$('.pic').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
@@ -1410,11 +1605,11 @@ function uploadFile2(mediaFile) {
 									app.navigate('task.html', 'startTask');
 								});
 							} else {
-								if (isOneAnswer) {
+								if (app.isOneAnswer) {
 									$.get(app.serverUrl + '?action=finishTask', data, function(result) {
 										if (result.success) {
 											if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
-												navigator.notification.alert('Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt', null, 'Teade!');
+												navigator.notification.alert(translations[lang]['insert_account'], null, 'Teade!');
 												user.done = parseInt(user.done) + 1;
 												app.updateUser();
 										
@@ -1452,7 +1647,7 @@ function uploadFile2(mediaFile) {
 	} 
 }
 
-function uploadFile(mediaFile) {
+function uploadFile2(mediaFile) {
 
 	u_user = user.id;
 	u_task = app.currentTask;
@@ -1464,7 +1659,7 @@ function uploadFile(mediaFile) {
 	navigator.geolocation.getCurrentPosition(function(position) {
 		$.get(app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + pic_answer, {}, function(result) {
 		//$('.sub-content').find('.confirmTask').removeClass('disabled');
-			        	//console.log(result.response);
+			console.log(result);
 			if (parseInt(result)) {
 			
 				$('.pic_fb').find('.ajax-loader').remove();
@@ -1479,7 +1674,7 @@ function uploadFile(mediaFile) {
 						app.navigate('task.html', 'startTask');
 					});
 				} else {
-					if (isOneAnswer) {
+					if (app.isOneAnswer) {
 						$.get(app.serverUrl + '?action=finishTask', data, function(result) {
 							if (result.success) {
 								if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')

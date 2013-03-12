@@ -2,7 +2,7 @@
  <html class="no-js">
     <head>
         <meta charset="utf-8">
-        <title>Smart Tasker</title>
+        <title>SmartTasker</title>
         <meta name="description" content="">
         <meta name="HandheldFriendly" content="True">
         <meta http-equiv="cleartype" content="on">
@@ -39,6 +39,10 @@
 		    	gaPlugin.init(successHandler, errorHandler, "UA-36289159-1", 10);
 		    	
 		    }
+		   // app.init();
+		    $(document).ready(function() {
+	//app.init();
+});
 		</script>
     </head>
     <body>
@@ -60,58 +64,62 @@
           	</div> 
           	<div class="content" data-role="content">
           		<div class="login-content slide-content">
-          			<div id="login" class="facebookBtn">Facebook Login</div>
+          			<div id="login" class="facebookBtn translate" data-keyword="facebook_login"></div>
 					<div class="login-form-wrap small">
-	                	<h3>või logi sisse firma  alt</h3>
+	                	<h3 class="translate" data-keyword="or_login_company">või logi firma kaudu</h3>
 	                	
 	                	<form action="" method="post" id="loginForm">
-	                    	<input id="mail" name="" type="email" placeholder="E-mail">
-	                        <input id="password" name="" type="password" placeholder="Parool">
-	                        <input id="loginBtn" class="btn blue" name="" type="submit" value="Login">
+	                    	<input id="mail" name="" type="email" data-keyword="mail" class="translate placeholder" placeholder="E-mail">
+	                        <input id="password" name="" type="password" data-keyword="password" class="translate placeholder" placeholder="Parool">
+	                        <input id="loginBtn" class="btn blue translate value" name="" data-keyword="login" type="submit" value="Login">
 	                        <fieldset>
 	                        	<input id="keepLoggedIn" name="" type="checkbox" value="">
-	                            <label for="keepLoggedIn">jäta mind meelde</label>
+	                            <label for="keepLoggedIn" class="translate" data-keyword="remember_me"></label>
 	                        </fieldset>
+	                        
 	                    </form>
+	                    
 	                </div>
+	                
+	                <a href="#" rel="et" class="et-flag flag"><img width="50" src="assets/flags/est-flag.png" /></a><a href="#"  rel="en" class="en-flag flag"><img width="50" src="assets/flags/eng-flag.png" /></a><a href="#" rel="ru" class="ru-flag flag"><img width="50" src="assets/flags/rus-flag.png" /></a>
 	                
                 </div>
                 <div class="mainmenu slide-content">
                 	<!-- all the same -->
                     <a href="step2" rel="getPrivate">
                         <span class="icon private-tasks"></span>
-                        <p>Kohustuslikud ülesanded <em class="note"></em></p>
+                        <p><span class="translate"  data-keyword="private_tasks"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <a href="step2" rel="getPublic">
                         <span class="icon public-tasks"></span>
-                        <p>Teeni või võida <em class="note"></em></p>
+                        <p><span class="translate"  data-keyword="public_tasks"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <a href="step2" rel="getUnfinished">
                         <span class="icon unfinished-tasks"></span>
-                        <p>Lõpetamata ülesanded <em class="note"></em></p>
+                        <p><span class="translate"  data-keyword="unfinished_tasks"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <a href="step2" rel="getDenied">
                         <span class="icon rejected-tasks"></span>
-                        <p>Tagasi lükatud ülesanded <em class="note"></em></p>
+                        <p><span class="translate"  data-keyword="rejected_tasks"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <!-- different -->
                     <a href="step2" rel="getStats">
                         <span class="icon stats"></span>
-                        <p>Statistika</p>
+                        <p class="translate"  data-keyword="stats"></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <a href="step2" rel="getPrizes">
                         <span class="icon prizes"></span>
-                        <p>Võidetud auhinnad <em class="note"></em></p>
+                        <p><span class="translate"  data-keyword="won_prizes"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
                     </a>
                     <a href="step2" rel="getProfile">
                         <span class="icon profile"></span>
-                        <p>Profiil</p>
+                        <p class="translate"  data-keyword="profile"></p>
                         <span class="arrow-icon"></span>
                     </a>
                 </div>
@@ -124,7 +132,7 @@
 	                            <strong style="font-size:20px;" id ="stats_accepted"></strong>
 	                        </div>
 	                        <div class="text-wrap">
-	                            <h3 class="task-name">Vastu võetud ülesandeid</h3>
+	                            <h3 class="task-name translate"  data-keyword="tasks_accepted"></h3>
 	                        </div>
 	                    </a>
 	                    <a href="#">
@@ -132,7 +140,7 @@
 	                            <strong style="font-size:20px;" id ="stats_done"></strong>
 	                        </div>
 	                        <div class="text-wrap">
-	                            <h3 class="task-name">Täidetud ülesandeid</h3>
+	                            <h3 class="task-name translate"  data-keyword="tasks_done"></h3>
 	                        </div>
 	                    </a>
 	                    <a href="#">
@@ -140,7 +148,7 @@
 	                            <strong style="font-size:20px;" id ="stats_rejected"></strong>
 	                        </div>
 	                        <div class="text-wrap">
-	                            <h3 class="task-name">Tagasi lükatud ülesandeid</h3>
+	                            <h3 class="task-name translate"  data-keyword="tasks_rejected"></h3>
 	                        </div>
 	                    </a>
 	                    <a href="#">
@@ -148,7 +156,7 @@
 	                            <strong style="font-size:20px;" id ="stats_money"></strong>
 	                        </div>
 	                        <div class="text-wrap">
-	                            <h3 class="task-name">Raha võidetud</h3>
+	                            <h3 class="task-name translate"  data-keyword="money_won"></h3>
 	                        </div>
 	                    </a>
 	                    <a href="#">
@@ -156,7 +164,7 @@
 	                            <strong style="font-size:20px;" id ="stats_prizes"></strong>
 	                        </div>
 	                        <div class="text-wrap">
-	                            <h3 class="task-name">Auhindu võidetud</h3>
+	                            <h3 class="task-name translate"  data-keyword="prizes_won"></h3>
 	                        </div>
 	                    </a>
                 	</div>
@@ -168,22 +176,22 @@
                 	<div class="profile-content" style="display:none;">
                 		
 	                	<div class="profile-form-wrap" style="width:300px;text-align:center;margin:0 auto;">
-	                		<h3>Muuda oma andmeid</h3>
+	                		<h3 class="translate"  data-keyword="change_your_data"></h3>
 	                		<form action="" method="post">
-		                		<input id="profile_firstname" name="" type="text" placeholder="Eesnimi">
-		                		<input id="profile_lastname" name="" type="text" placeholder="Eesnimi">
-		                		<input id="profile_bank" name="" type="text" placeholder="Panga konto nr">
-		                    	<input id="profile_mail" name="" type="email" placeholder="E-mail">
-		                    	<input id="profile_password" name="" type="text" placeholder="Uus parool">
+		                		<input id="profile_firstname" class="translate placeholder" data-keyword="firstname" name="" type="text" placeholder="firstname">
+		                		<input id="profile_lastname" class="translate placeholder" data-keyword="lastname" name="" type="text" placeholder="lastname">
+		                		<input id="profile_bank" class="translate placeholder" data-keyword="account_nr" name="" type="text" placeholder="account_nr">
+		                    	<input id="profile_mail" class="translate placeholder" data-keyword="mail" name="" type="email" placeholder="">
+		                    	<input id="profile_password" class="translate placeholder" data-keyword="password" name="" type="text" placeholder="password">
 		                    	
 		                        <fieldset style="margin:0 auto;width:240px;text-align:left;">
-		                        	<strong>Sugu: </strong>
+		                        	<strong class="translate" data-keyword="sex"></strong>
 		                        	<input id="sex_male" name="sex" type="radio" value="male">
-		                        	<label for="sex">Mees</label>
+		                        	<label for="sex" class="translate" data-keyword="male"></label>
 		                        	<input id="sex_female" name="sex" type="radio" value="female">
-		                            <label for="sex">Naine</label>
+		                            <label for="sex" class="translate"  data-keyword=""female></label>
 		                        </fieldset>
-		                        <input id="saveProfileBtn" class="btn blue" name="" type="submit" value="Salvesta">
+		                        <input id="saveProfileBtn" class="btn blue translate value" name="" type="submit" value="save">
 		                        
 	                        
 	                        </form>
@@ -195,12 +203,12 @@
                 	<div class="task-prize-template template" style="display:none;">
 	                    <a href="#">
 	                        <div class="prize-wrap">
-	                            <span class="label">Auhind</span>
+	                            <span class="label translate"  data-keyword="prize"></span>
 	                            <img class="prize-thumb" src="assets/images/img-prize-thumb.jpg" width="25" height="25">
 	                        </div>
 	                        <div class="text-wrap">
 	                            <h3 class="task-name">Auhinna pealkiri</h3>
-	                            <p><span class="distance">Kaugus: <strong class="distance-value">650</strong></span> <span class="deadline">Tähtaeg: <strong class="time-left">2 h 45 min</strong></span></p>
+	                            <p><span class="distance"><strong class="distance-name translate"  data-keyword="distance"></strong><strong class="distance-value">650</strong></span> <span class="deadline"><strong class="deadline-name translate"  data-keyword="deadline"></strong><strong class="time-left">2 h 45 min</strong></span></p>
 	                            <p><strong style="font-weight:normal;" class="address"></strong></p>
 	                        </div>
 	                    </a>
@@ -209,12 +217,12 @@
                     	
                     	<a href="#">
 	                        <div class="prize-wrap">
-	                            <span class="label">Auhind</span>
+	                            <span class="label translate"  data-keyword="prize"></span>
 	                            <img class="prize-thumb" src="assets/images/img-prize-thumb.jpg" width="25" height="25">
 	                        </div>
 	                        <div class="text-wrap">
 	                            <h3 class="task-name">Auhinna pealkiri</h3>
-	                            <p><span class="distance"><strong class="distance-name">Kaugus</strong> <strong class="distance-value">650</strong></span> <span class="deadline"><strong class="deadline-name">Tähtaeg</strong> <strong class="time-left">2 h 45 min</strong></span></p>
+	                            <p><span class="distance"><strong class="distance-name translate"  data-keyword="distance"></strong> <strong class="distance-value">650</strong></span> <span class="deadline"><strong class="deadline-name translate"  data-keyword="deadline"></strong> <strong class="time-left">2 h 45 min</strong></span></p>
 	                        </div>
 	                    </a>
                     	
@@ -234,16 +242,16 @@
                 	<div class="task-prize-template template" style="display:none;">
 	                    <div class="task-info">
 	                        <div class="prize-wrap">
-	                            <span class="label">Auhind</span>
+	                            <span class="label translate"  data-keyword="prize"></span>
 	                            <img class="prize-thumb" src="assets/images/img-prize-thumb-medium.jpg" width="43" height="43">
 	                        </div>
 	                        <h3 class="task-name"></h3>
-	                        <p><span class="distance"></span> <span class="deadline">Tähtaeg <strong class="time-left"></strong></span></p>
+	                        <p><span class="distance"></span> <span class="deadline"><span class="translate"  data-keyword="">deadline</span> <strong class="time-left"></strong></span></p>
 	                    </div>
 	                    <p class="desc"></p>
 	                    <p class="address"></p>
 	                    <ul class="list"></ul>
-	                    <a href="#" class="btn light-blue task-btn startTask">Alusta ülesannet</a>
+	                    <a href="#" class="btn light-blue task-btn startTask translate"  data-keyword="start_task"></a>
 	                    <div id="taskMap">Kaart</div>
 	                    
                     </div>
@@ -257,30 +265,30 @@
 	                    </a>
                     </div>
                     
-                    <a href="#" class="btn light-blue task-btn confirmTasks disabled">Kinnita</a>
+                    <a href="#" class="btn light-blue task-btn confirmTasks disabled translate"  data-keyword="confirm"></a>
                     
                 </div>
                 
                 <div class="sub-task slide-content">
                 	<div class="sub-content">
-                		<h3>Ülesande kirjeldus</h3>
+                		<h3 class="translate"  data-keyword="task_description"></h3>
                 		
                 		<p class="pic">
-	                		<a href="#" class="btn light-blue task-btn doPic">Tee pilt</a>
+	                		<a href="#" class="btn light-blue task-btn doPic translate"  data-keyword="take_a_pic"></a>
 	                		<br style="clear:both;" />
 	                		<img src="" class="captured-image" style="max-width:275px;max:height:200px;" />
 	                		<br style="clear:both;" /><br />
-	                		<textarea id="picAnswer" placeholder="Kommentaar" style="width:260px;height:40px;"></textarea>
+	                		<textarea id="picAnswer" class="translate placeholder" placeholder="Kommentaar" data-keyword="comment"  style="width:260px;height:40px;"></textarea>
                 		</p>
                 		<p class="pic_fb">
-	                		<a href="#" class="btn light-blue task-btn doPic">Tee pilt</a>
+	                		<a href="#" class="btn light-blue task-btn doPic translate"  data-keyword="take_a_pic"></a>
 	                		<br style="clear:both;" />
 	                		<img src="" class="captured-image" style="max-width:275px;max:max-height:250px;" />
 	                		<br style="clear:both;" />
-	                		<a href="#" class="btn light-blue task-btn postFB disabled">Postita Facebooki</a>
+	                		<a href="#" class="btn light-blue task-btn postFB disabled translate"  data-keyword="post_to_facebook"></a>
                 		</p>
                 		<p class="tracking">
-	                		Pead olema 50m raadiuses, hetkel: <strong id="current_distance"></strong>m<br />
+	                		<span class="translate"  data-keyword="have_to_be_distance"></span><strong id="current_distance"></strong>m<br />
 	                		<div id="sub_map"></div>
                 		</p>
                 		<p class="question">
@@ -293,7 +301,7 @@
                 		<p class="select">
                 			<!-- <span class="tip"></span><br /><br /> -->
 	                		<select id="rating">
-	                			<option value="0">Vali</option>
+	                			<option value="0" class="translate"  data-keyword="choose"></option>
 	                			<option value="1">1</option>
 	                			<option value="2">2</option>
 	                			<option value="3">3</option>
@@ -307,7 +315,7 @@
 	                		</select>
                 		</p>
                 		
-                		<a href="#" class="btn light-blue task-btn confirmTask disabled">Kinnita</a>
+                		<a href="#" class="btn light-blue task-btn confirmTask disabled translate" data-keyword="confirm"></a>
                 		
                 	</div>
                 	

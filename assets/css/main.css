@@ -270,6 +270,16 @@ textarea {
 #loginForm {
 	display: none;
 }
+.flag {
+	margin-left:20px;
+	margin-right:20px;
+	width: 50px;
+	height: 32px;
+	display: inline-block;
+}
+.flag.active {
+	border: 2px solid;
+}
 
 input[type="text"], input[type="email"], input[type="password"] {
 	display:inline-block;
