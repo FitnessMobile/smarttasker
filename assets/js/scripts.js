@@ -107,7 +107,7 @@ translations.en['continue_task']  = 'Continue';
 translations.en['start_task']  = 'Start a task';
 translations.en['error_on_server']  = 'Server error, please try again.';
 translations.en['no_tasks']  = 'No tasks';
-translations.en['insert_account'] = 'Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt';
+translations.en['insert_account'] = 'You are missing bank account/e-mail, please insert them under profile';
 
 translations.ru = [];
 translations.ru['mainmenu']  = 'Менью';
@@ -156,7 +156,7 @@ translations.ru['continue_task']  = 'Продолжить выполнение �
 translations.ru['start_task']  = 'Начат задание';
 translations.ru['error_on_server']  = 'Ошибка сервера, пожалуйста попробуй ещё раз.';
 translations.ru['no_tasks']  = 'Задания отсутствуют';
-translations.ru['insert_account'] = 'Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt';
+translations.ru['insert_account'] = 'У вас не хватает банковского счета/электронной почты, пожалуйста, введите их в профиле';
 
 
 window.onerror = function (msg, url, line) {
@@ -597,7 +597,7 @@ app = {
 						
 					});
 				} else {
-					$('.prizes-content').html('<h3>' + translations[lang]['no_prizes'] + '</h3>');
+					$('.prizes-content').html('<h3>' + translations[lang]['no_prizes_yet'] + '</h3>');
 				}
 			
 			}, 'jsonp');
