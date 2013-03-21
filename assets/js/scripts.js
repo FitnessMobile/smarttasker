@@ -59,6 +59,8 @@ translations.et['continue_task']  = 'Jätka ülesannet';
 translations.et['start_task']  = 'Alusta ülesannet';
 translations.et['error_on_server']  = 'Serveri viga, palun proovi uuesti.';
 translations.et['no_tasks']  = 'Ülesanded puuduvad';
+translations.et['insert_account'] = 'Sul puudub pangakonto number või e-mail, sisesta need profiili alt';
+translations.et['no_location_rights'] = 'Pead lubama rakendusel asukohta lugeda!';
 
 translations.en = [];
 translations.en['mainmenu']  = 'Menu';
@@ -108,6 +110,7 @@ translations.en['start_task']  = 'Start a task';
 translations.en['error_on_server']  = 'Server error, please try again.';
 translations.en['no_tasks']  = 'No tasks';
 translations.en['insert_account'] = 'You are missing bank account/e-mail, please insert them under profile';
+translations.en['no_location_rights'] = 'You must allow application to read your location!';
 
 translations.ru = [];
 translations.ru['mainmenu']  = 'Менью';
@@ -157,6 +160,7 @@ translations.ru['start_task']  = 'Начат задание';
 translations.ru['error_on_server']  = 'Ошибка сервера, пожалуйста попробуй ещё раз.';
 translations.ru['no_tasks']  = 'Задания отсутствуют';
 translations.ru['insert_account'] = 'У вас не хватает банковского счета/электронной почты, пожалуйста, введите их в профиле';
+translations.ru['no_location_rights'] = 'Вы должны разрешить приложению читать ваше местоположение';
 
 
 window.onerror = function (msg, url, line) {
@@ -188,6 +192,7 @@ app = {
 	curFunction: 'init',
 	mapView: false, 
 	isOneAnswer: false,
+	isContinues: false,
 	
 	init: function() {
 	
@@ -672,6 +677,7 @@ app = {
 				
 				data.lat = position.coords.latitude;
 				data.lng = position.coords.longitude;
+				data.lang = lang;
 				
 				$.get(app.serverUrl + '?action=getTasks', data, function(results) {
 					if(results.length) {
@@ -694,7 +700,17 @@ app = {
 							}
 
 							template = $('.tasklist').find('.task-prize-template');
-							template.find('a').attr('rel', item.id);
+							if (item.user_task_id) {
+								template.find('a').attr('rel', item.user_task_id);
+								template.find('a').addClass('continues');
+								template.find('a').attr('data-task', item.id);
+								console.log(template.find('a').data('task'));
+							} else {
+								template.find('a').attr('rel', item.id);
+								template.find('a').attr('data-task', item.id);
+								console.log(template.find('a').data('task'));
+								template.find('a').removeClass('continues');
+							}
 							template.find('.task-name').html(item.name);
 							template.find('.time-left').html(item.end);
 							if (item.address) {
@@ -796,8 +812,15 @@ app = {
 						$('.tasklist-content').html('<h3>' + translations[lang]['no_tasks'] + '</h3>');
 					}
 					
-					$('.tasklist').find('a').click(function(e) {
-						app.currentTask = $(this).attr('rel');
+					$('.tasklist-content').find('a').click(function(e) {
+						//console.log($(this).data('task'));
+						app.currentTask = $(this).data('task');
+						if ($(this).hasClass('continues')) {
+							app.isContinues = $(this).attr('rel');
+						} else {
+							app.isContinues = false;
+						}
+						
 						e.preventDefault();
 						app.navigate('task.html', 'loadTask');
 					});
@@ -805,7 +828,7 @@ app = {
 				}, 'jsonp');
 				
 			}, function(error) {
-				alert('Pead lubama applikatsioonil asukohta näha');
+				alert(translations[lang]['no_location_rights']);
 			});
 		}
 		
@@ -817,6 +840,7 @@ app = {
 		$('.map-btn').hide();
 		$('.list-btn').hide();
 	
+		app.finishedTask = false;
 		app.curFunction = 'loadTask';
 		
 		$('.back-btn').unbind('click');
@@ -832,6 +856,7 @@ app = {
 		data = {};
 		data.user = user.id;
 		data.task = app.currentTask;
+		data.continues = app.isContinues;
 		
 		$.get(app.serverUrl + '?action=getTask', data, function(item) {
 			
@@ -887,11 +912,19 @@ app = {
 					sub_template = $('.detailed-task').find('.sub-task-template');
 					sub_template.find('.task-name').html(sub.name);
 					sub_template.find('a').attr('rel', sub.id);
-					if(sub.answer)
+					
+					console.log(sub.answer);
+					
+					
+					
+					if(sub.answer && sub.answer != '' && sub.answer != 'false') 
 						sub_template.find('a').css('color', 'green').addClass('done').find('.arrow-icon').hide();
 					else
 						sub_template.find('a').css('color', '#888').removeClass('done').find('.arrow-icon').show();
 						
+					
+					console.log(sub_template);
+					
 					$('.started-content').append(sub_template.html());
 
 				});
@@ -903,10 +936,9 @@ app = {
 			data.user = user.id;
 			data.task = item.id;
 			
-			
-			
 			if (item.status && item.status != false) {
-				if (item.status == 'rejected')
+				app.user_task_id = item.user_task_id;
+				if (item.status == 'rejected') 
 					$('.startTask:first').html(translations[lang]['start_task_again']);
 				else
 					$('.startTask:first').html(translations[lang]['continue_task']);
@@ -927,7 +959,7 @@ app = {
 					
 					$.get(app.serverUrl + '?action=startTask', data, function(result) {
 						if (result.success) {
-						
+							app.user_task_id = result.success;
 							if (item.subs.length > 1) {
 								app.startTask();
 								app.isOneAnswer = false;
@@ -1089,7 +1121,7 @@ app = {
 				data = {};
 				data.user = user.id;
 				data.task = app.currentTask;
-				
+				data.user_task_id = app.user_task_id;
 				$.get(app.serverUrl + '?action=finishTask', data, function(result) {
 					if (result.success) {
 						if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
@@ -1351,6 +1383,7 @@ app = {
 	
 	sendAnswer: function(data) {
 		app.curFunction = 'sendAnswer';
+		data.user_task_id = app.user_task_id;
 		$.get(app.serverUrl + '?action=doTask', data, function(result) {
 			if (result.success) {
 				app.finishedTask = data.sub_task;
@@ -1579,7 +1612,8 @@ function uploadFile(mediaFile) {
 
 			app.position = position;
 			pic_answer = encodeURIComponent($('#picAnswer').val());
-		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + pic_answer;
+			//data.user_task_id = app.user_task_id;
+		    upload_url = app.serverUrl + "?action=uploadPhoto&callback=123&user=" + u_user + "&task=" + u_task + "&sub_task=" + u_sub_task + "&lat=" + position.coords.latitude + "&lng=" + position.coords.longitude + "&answer=" + pic_answer + "&user_task_id=" + app.user_task_id
 		    //console.log(path);
 		    //console.log(upload_url);
 		    
