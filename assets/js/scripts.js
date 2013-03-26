@@ -1128,6 +1128,7 @@ app = {
 		}
 		
 		if (i == $('.started-content').find('a').length) {
+			$('.started-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
 			$('.confirmTasks').removeClass('disabled');
 			$('.confirmTasks').unbind('click');
 			$('.confirmTasks').click(function(e) {
@@ -1138,6 +1139,7 @@ app = {
 				data.user_task_id = app.user_task_id;
 				$.get(app.serverUrl + '?action=finishTask', data, function(result) {
 					if (result.success) {
+						$('.started-content').find('.ajax-loader').remove();
 						if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
 							navigator.notification.alert('Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt', null, 'Teade!');
 							user.done = parseInt(user.done) + 1;
@@ -1604,8 +1606,7 @@ function captureImage() {
 // Upload files to server
 function uploadFile(mediaFile) {
 	
-	$('.pic_fb').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
-	$('.pic').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
+	$('.sub-content').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
 		
 	u_user = user.id;
 	u_task = app.currentTask;
@@ -1638,8 +1639,7 @@ function uploadFile(mediaFile) {
 			        	//console.log(result.response);
 						if (parseInt(result.response)) {
 						
-							$('.pic_fb').find('.ajax-loader').remove();
-							$('.pic').find('.ajax-loader').remove();
+							$('.sub-content').find('.ajax-loader').remove();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
 								postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description);
