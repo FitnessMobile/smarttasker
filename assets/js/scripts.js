@@ -62,6 +62,11 @@ translations.et['no_tasks']  = 'Ülesanded puuduvad';
 translations.et['insert_account'] = 'Sul puudub pangakonto number või e-mail, sisesta need profiili alt';
 translations.et['no_location_rights'] = 'Pead lubama rakendusel asukohta lugeda!';
 
+translations.et['cancel_last_and_start_over'] = 'Oled kindel, et soovid uuesti alustada?';
+translations.et['going_back_deletes'] = 'Tagasi minnes kaotad kogu siinse info.';
+translations.et['message'] = 'Teada';
+translations.et['cancel'] = 'Tühista';
+
 translations.en = [];
 translations.en['mainmenu']  = 'Menu';
 translations.en['facebook_login']  = 'Facebook login';
@@ -111,6 +116,11 @@ translations.en['error_on_server']  = 'Server error, please try again.';
 translations.en['no_tasks']  = 'No tasks';
 translations.en['insert_account'] = 'You are missing bank account/e-mail, please insert them under profile';
 translations.en['no_location_rights'] = 'You must allow application to read your location!';
+
+translations.en['cancel_last_and_start_over'] = 'Are you sure that you want to start over again?';
+translations.en['going_back_deletes'] = 'Going back deletes current info';
+translations.en['message'] = 'Notification';
+translations.en['cancel'] = 'Cancel';
 
 translations.ru = [];
 translations.ru['mainmenu']  = 'Менью';
@@ -162,6 +172,10 @@ translations.ru['no_tasks']  = 'Задания отсутствуют';
 translations.ru['insert_account'] = 'У вас не хватает банковского счета/электронной почты, пожалуйста, введите их в профиле';
 translations.ru['no_location_rights'] = 'Вы должны разрешить приложению читать ваше местоположение';
 
+translations.ru['cancel_last_and_start_over'] = 'Вы уверены, что хотите начать заново?';
+translations.ru['going_back_deletes'] = 'Возвращаясь удаляет текущую информацию';
+translations.ru['message'] = 'Уведомление';
+translations.ru['cancel'] = 'Отменить';
 
 window.onerror = function (msg, url, line) {
 	if (window.device.platform != 'Generic') {
@@ -1154,7 +1168,7 @@ app = {
 					//console.log('button + ' + button);
 					if(button == 1 || button == 'undefined')
 						app.navigate('sub.html', 'loadSub');
-				}, 'Teade', 'Jah, Ei');
+				}, translations[lang]['message'], 'Ok, ' + translations[lang]['cancel']);
 			} else {
 				app.currentSub = parseInt($(this).attr('rel'));
 				app.navigate('sub.html', 'loadSub');
@@ -1184,11 +1198,11 @@ app = {
 		$('.back-btn').click(function(e) {
 			
 			e.preventDefault();
-			navigator.notification.confirm('Tagasi minnes kaotad siinse info, oled kindel?', function(button) {
+			navigator.notification.confirm(translations[lang]['going_back_deletes'], function(button) {
 				button = 1;
 				if(button == 1)
 					app.navigate('task.html', 'startTask');
-			}, 'Teade', 'Ok, Tühista');
+			}, translations[lang]['message'], 'Ok, ' + translations[lang]['cancel']);
 			
 		});	
 		//$('.logged-in').find('h2').html(sub_tasks[app.currentSub].name);
