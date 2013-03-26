@@ -1580,10 +1580,10 @@ function captureError(error) {
 // A button will call this function
 function captureImage() {
 	navigator.camera.getPicture(captureSuccess, captureError, {
-		quality : 50, 
+		quality : 70, 
 		destinationType: destinationType.FILE_URI,
 		targetWidth: 1280,
-			targetHeight: 960
+		targetHeight: 960
 	});
 }
 
