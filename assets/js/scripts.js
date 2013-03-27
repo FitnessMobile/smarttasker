@@ -210,6 +210,8 @@ app = {
 	
 	init: function() {
 	
+		initFB();
+	
 		if (localStorage.getItem('lang')) {
 			lang = localStorage.getItem('lang');
 			$('.' + lang + '-flag').addClass('active');
@@ -321,14 +323,17 @@ app = {
 				
 			$('#loginForm').toggle();
 		});
+		getLoginStatus();
 		
 		if (!localStorage.getItem(facebook_token)){
+			login();
 			$("#login").click(function(){
 				Facebook.init();
 			});
 		
 		} else {
 			$("#login").click(function(){
+				login();
 				token = localStorage.getItem(facebook_token);
 				//console.log('exists: ' + token);
 				Facebook.get();
