@@ -325,11 +325,26 @@ app = {
 		});
 		getLoginStatus();
 		
-		$("#login").click(function(){
-			//Facebook.init();
-			login();
-			alert('clicked login');
+		FB.getLoginStatus(function(response) {
+			if (response.status == 'connected') {
+				app.getFacebookMe();
+			} else {
+				$("#login").click(function() {
+					FB.login(
+						function(response) {
+							if (response.session) {
+								app.getFacebookMe();
+								console.log(response);
+							} else {
+								alert('not logged in');
+							}
+						},
+						{ scope: "email" }
+					);
+				});
+			}
 		});
+
 		/*
 		if (!localStorage.getItem(facebook_token)){
 			
@@ -343,8 +358,6 @@ app = {
 			});
 		}
 		*/
-		if(fromFb)
-			Facebook.get();
 
 		$('#loginBtn').click(function(e) {
 			//console.log('wdf');
@@ -379,6 +392,23 @@ app = {
 				app.doLogin(false, data);
 				
 			}			
+		});
+		
+	},
+	
+	getFacebookMe: function() {
+		FB.api('/me', { },  function(response) {
+			if (response.error) {
+				alert(JSON.stringify(response.error));
+			} else {
+				console.log(response);
+				data.fb_id = response.id;
+				data.firstname = response.first_name;
+				data.lastname = response.last_name;
+				data.sex = response.gender;
+				data.mail = '';
+				app.doLogin(false, data);
+			}
 		});
 		
 	},
@@ -1516,14 +1546,26 @@ if (typeof(Number.prototype.toRad) === "undefined") {
 function postToFacebook(image_id, name, description) {
 	
 	// Define our message!
-	var msg = name;
+	//var msg = name;
 
 	// Define the part of the Graph you want to use.
-	var _fbType = 'feed';
+	//var _fbType = 'feed';
 
 	// This example will post to a users wall with an image, link, description, text, caption and name.
 	// You can change
 
+	var params = {
+	    method: 'feed',
+	    name: 'SmartTasker',
+	    link: 'http://www.smarttasker.ee',
+	    picture: "http://www.smarttasker.com/app/pictures/" + image_id + ".jpg",
+	    caption: name,
+	    message: 'Lahendasin just ülesande!',
+	    description: description
+	};
+	console.log(params);
+    FB.ui(params, function(obj) { console.log(obj);});
+/*
 	var params = {};
 		params['message'] = 'Lahendasin just ülesande!';
 		params['name'] = 'SmartTasker';
@@ -1536,6 +1578,7 @@ function postToFacebook(image_id, name, description) {
 
 	// When you're ready send you request off to be processed!
 	Facebook.post(_fbType,params);	
+*/
 }
 
 function onOffline() {
