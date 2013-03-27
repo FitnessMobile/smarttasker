@@ -325,11 +325,14 @@ app = {
 		});
 		getLoginStatus();
 		
+		$("#login").click(function(){
+			//Facebook.init();
+			login();
+			alert('clicked login');
+		});
+		/*
 		if (!localStorage.getItem(facebook_token)){
-			$("#login").click(function(){
-				//Facebook.init();
-				login();
-			});
+			
 		
 		} else {
 			$("#login").click(function(){
@@ -339,7 +342,7 @@ app = {
 				login();
 			});
 		}
-		
+		*/
 		if(fromFb)
 			Facebook.get();
 
