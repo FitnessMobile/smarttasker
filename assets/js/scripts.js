@@ -213,7 +213,7 @@ app = {
 		try {
 			FB.init({ appId: "405225646214042", nativeInterface: CDV.FB, useCachedDialogs: false });
 		} catch (e) {
-			alert(e);
+			app.deliverError(e, '216');
 		}
 	
 		if (localStorage.getItem('lang')) {
@@ -337,16 +337,7 @@ app = {
 				});
 			} else {
 				$("#login").click(function() {
-					FB.login(
-						function(response) {
-							if (response.session) {
-								app.getFacebookMe();
-							} else {
-								alert('Log in failed');
-							}
-						},
-						{ scope: "email" }
-					);
+					app.authFacebook();
 				});
 			}
 		});
@@ -388,12 +379,28 @@ app = {
 		
 	},
 	
+	authFacebook: function() {
+		
+		FB.login(
+			function(response) {
+				if (response.session) {
+					app.getFacebookMe();
+				} else {
+					app.getFacebookMe();
+				}
+			},
+			{ scope: "email" }
+		);
+			
+	},
+	
 	getFacebookMe: function() {
 		app.curFunction = 'facebookMe';
 		
 		FB.api('/me', { },  function(response) {
 			if (response.error) {
-				alert(JSON.stringify(response.error));
+				//alert(JSON.stringify(response.error));
+				app.authFacebook();
 			} else {
 				console.log(response);
 				data.fb_id = response.id;
