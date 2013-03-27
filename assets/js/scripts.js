@@ -327,20 +327,23 @@ app = {
 				
 			$('#loginForm').toggle();
 		});
-		
-		FB.getLoginStatus(function(response) {
-			if (response.status == 'connected') {
-				//alert('connected');
-				$("#login").click(function() {
-					//alert('fb me');
-					app.getFacebookMe();
-				});
-			} else {
-				$("#login").click(function() {
-					app.authFacebook();
-				});
-			}
-		});
+		try {
+			FB.getLoginStatus(function(response) {
+				if (response.status == 'connected') {
+					//alert('connected');
+					$("#login").click(function() {
+						//alert('fb me');
+						app.getFacebookMe();
+					});
+				} else {
+					$("#login").click(function() {
+						app.authFacebook();
+					});
+				}
+			});
+		} catch(e) {
+			app.deliverError(e, '216');
+		}
 
 		$('#loginBtn').click(function(e) {
 			//console.log('wdf');
