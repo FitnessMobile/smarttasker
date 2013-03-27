@@ -328,18 +328,15 @@ app = {
 			$('#loginForm').toggle();
 		});
 		try {
-			FB.getLoginStatus(function(response) {
-				if (response.status == 'connected') {
-					//alert('connected');
-					$("#login").click(function() {
-						//alert('fb me');
+			$("#login").click(function(e) {
+				e.preventDefault();
+				FB.getLoginStatus(function(response) {
+					if (response.status == 'connected') {
 						app.getFacebookMe();
-					});
-				} else {
-					$("#login").click(function() {
+					} else {
 						app.authFacebook();
-					});
-				}
+					}
+				});
 			});
 		} catch(e) {
 			app.deliverError(e, '216');
