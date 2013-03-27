@@ -326,17 +326,17 @@ app = {
 		getLoginStatus();
 		
 		if (!localStorage.getItem(facebook_token)){
-			login();
 			$("#login").click(function(){
-				Facebook.init();
+				//Facebook.init();
+				login();
 			});
 		
 		} else {
 			$("#login").click(function(){
-				login();
-				token = localStorage.getItem(facebook_token);
+				//token = localStorage.getItem(facebook_token);
 				//console.log('exists: ' + token);
-				Facebook.get();
+				//Facebook.get();
+				login();
 			});
 		}
 		
