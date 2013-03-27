@@ -323,18 +323,20 @@ app = {
 				
 			$('#loginForm').toggle();
 		});
-		getLoginStatus();
 		
 		FB.getLoginStatus(function(response) {
 			if (response.status == 'connected') {
-				app.getFacebookMe();
+				alert('connected');
+				$("#login").click(function() {
+					alert('fb me');
+					app.getFacebookMe();
+				});
 			} else {
 				$("#login").click(function() {
 					FB.login(
 						function(response) {
 							if (response.session) {
 								app.getFacebookMe();
-								console.log(response);
 							} else {
 								alert('not logged in');
 							}
@@ -344,20 +346,6 @@ app = {
 				});
 			}
 		});
-
-		/*
-		if (!localStorage.getItem(facebook_token)){
-			
-		
-		} else {
-			$("#login").click(function(){
-				//token = localStorage.getItem(facebook_token);
-				//console.log('exists: ' + token);
-				//Facebook.get();
-				login();
-			});
-		}
-		*/
 
 		$('#loginBtn').click(function(e) {
 			//console.log('wdf');
