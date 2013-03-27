@@ -210,7 +210,11 @@ app = {
 	
 	init: function() {
 	
-		initFB();
+		try {
+			FB.init({ appId: "405225646214042", nativeInterface: CDV.FB, useCachedDialogs: false });
+		} catch (e) {
+			alert(e);
+		}
 	
 		if (localStorage.getItem('lang')) {
 			lang = localStorage.getItem('lang');
@@ -326,9 +330,9 @@ app = {
 		
 		FB.getLoginStatus(function(response) {
 			if (response.status == 'connected') {
-				alert('connected');
+				//alert('connected');
 				$("#login").click(function() {
-					alert('fb me');
+					//alert('fb me');
 					app.getFacebookMe();
 				});
 			} else {
@@ -338,7 +342,7 @@ app = {
 							if (response.session) {
 								app.getFacebookMe();
 							} else {
-								alert('not logged in');
+								alert('Log in failed');
 							}
 						},
 						{ scope: "email" }
@@ -385,6 +389,8 @@ app = {
 	},
 	
 	getFacebookMe: function() {
+		app.curFunction = 'facebookMe';
+		
 		FB.api('/me', { },  function(response) {
 			if (response.error) {
 				alert(JSON.stringify(response.error));
@@ -1531,44 +1537,6 @@ if (typeof(Number.prototype.toRad) === "undefined") {
   }
 }
 
-function postToFacebook(image_id, name, description) {
-	
-	// Define our message!
-	//var msg = name;
-
-	// Define the part of the Graph you want to use.
-	//var _fbType = 'feed';
-
-	// This example will post to a users wall with an image, link, description, text, caption and name.
-	// You can change
-
-	var params = {
-	    method: 'feed',
-	    name: 'SmartTasker',
-	    link: 'http://www.smarttasker.ee',
-	    picture: "http://www.smarttasker.com/app/pictures/" + image_id + ".jpg",
-	    caption: name,
-	    message: 'Lahendasin just ülesande!',
-	    description: description
-	};
-	console.log(params);
-    FB.ui(params, function(obj) { console.log(obj);});
-/*
-	var params = {};
-		params['message'] = 'Lahendasin just ülesande!';
-		params['name'] = 'SmartTasker';
-		params['description'] = description;
-		params['_link'] = "http://www.smarttasker.ee";
-		params['picture'] = "http://www.smarttasker.com/app/pictures/" + image_id + ".jpg";
-		params['caption'] = name;
-
-		//console.log(params);
-
-	// When you're ready send you request off to be processed!
-	Facebook.post(_fbType,params);	
-*/
-}
-
 function onOffline() {
     navigator.notification.alert('Edasi minekuks pead olema online', null, 'Teade!');
     app.navigate('home.html');
@@ -1681,13 +1649,46 @@ function uploadFile(mediaFile) {
 							$('.sub-content').find('.ajax-loader').remove();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
-								postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description);
-								$('.sub-content').find('.confirmTask').removeClass('disabled');
-								$('.sub-content').find('.confirmTask').unbind('click');
-								$('.sub-content').find('.confirmTask').click(function() {
-									app.finishedTask = u_sub_task;
-									app.navigate('task.html', 'startTask');
-								});
+								//postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description, u_sub_task);
+								
+								var params = {
+								    method: 'feed',
+								    name: 'SmartTasker',
+								    link: 'http://www.smarttasker.ee',
+								    picture: "http://www.smarttasker.com/app/pictures/" + parseInt(result.response) + ".jpg",
+								    caption: task.name,
+								    message: 'Lahendasin just ülesande!',
+								    description: sub_tasks[app.currentSub].description
+								};
+								//console.log(params);
+							    FB.ui(params, function(obj) { 
+							    
+							    	//console.log(obj);
+							    	$('.sub-content').find('.confirmTask').removeClass('disabled');
+									$('.sub-content').find('.confirmTask').unbind('click');
+									$('.sub-content').find('.confirmTask').click(function() {
+										if (app.isOneAnswer) {
+											$.get(app.serverUrl + '?action=finishTask', data, function(result) {
+												if (result.success) {
+													if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
+														navigator.notification.alert(translations[lang]['insert_account'], null, 'Teade!');
+														user.done = parseInt(user.done) + 1;
+														app.updateUser();
+												
+													app.navigate('home.html', 'loadHome');
+												} else {
+													alert('Midagi läks valesti serveris, proovi uuesti.');
+												}
+												//start auto tracking user :) muahaha..
+												
+											}, 'jsonp');
+										} 
+										app.finishedTask = u_sub_task;
+										app.navigate('task.html', 'startTask');
+									});
+							    });
+								
+								
 							} else {
 								if (app.isOneAnswer) {
 									$.get(app.serverUrl + '?action=finishTask', data, function(result) {
@@ -1704,7 +1705,7 @@ function uploadFile(mediaFile) {
 										//start auto tracking user :) muahaha..
 										
 									}, 'jsonp');
-								}
+								} 
 								app.finishedTask = u_sub_task;
 								app.navigate('task.html', 'startTask');
 							}
