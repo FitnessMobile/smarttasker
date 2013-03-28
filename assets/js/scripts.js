@@ -177,6 +177,11 @@ translations.ru['going_back_deletes'] = 'Возвращаясь удаляет �
 translations.ru['message'] = 'Уведомление';
 translations.ru['cancel'] = 'Отменить';
 
+window.alert = function () {
+	alert('got ya');
+	return true
+};
+
 window.onerror = function (msg, url, line) {
 	if (window.device.platform != 'Generic') {
    		error_data = {};
@@ -224,8 +229,6 @@ app = {
 			}
 			
 		}, 1500);
-		
-		
 	
 		if (localStorage.getItem('lang')) {
 			lang = localStorage.getItem('lang');
@@ -1138,6 +1141,8 @@ app = {
 	startTask: function() {
 		
 		$('.dir-btn').hide();
+		
+		$('.ajax-loader').remove();
 	
 		app.curFunction = 'startTask';
 		$('.back-btn').unbind('click');
