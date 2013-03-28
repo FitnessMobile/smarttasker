@@ -209,12 +209,18 @@ app = {
 	isContinues: false,
 	
 	init: function() {
-	
-		try {
-			FB.init({ appId: "405225646214042", nativeInterface: CDV.FB, useCachedDialogs: false });
-		} catch (e) {
-			app.deliverError(e, '216');
-		}
+		alert('without FB');
+		setTimeout(function() {
+			alert('INITING FB');
+			try {
+				FB.init({ appId: "405225646214042", nativeInterface: CDV.FB, useCachedDialogs: false });
+			} catch (e) {
+				app.deliverError(e, '216');
+			}
+			
+		}, 1500);
+		
+		
 	
 		if (localStorage.getItem('lang')) {
 			lang = localStorage.getItem('lang');
