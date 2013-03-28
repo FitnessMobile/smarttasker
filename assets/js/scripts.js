@@ -420,7 +420,7 @@ app = {
 				data.lastname = response.last_name;
 				data.sex = response.gender;
 				data.mail = '';
-				app.doLogin(false, data);
+				app.doLogin(data.fb_id, data);
 			}
 		});
 		
