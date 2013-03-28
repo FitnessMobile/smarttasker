@@ -199,8 +199,6 @@ window.onerror = function (msg, url, line) {
 
 app = {
 
-	localStorage.removeItem('cdv_fb_session');
-
 	navigated: false,
 	profileToLoad: false,
 	position: {},
@@ -212,6 +210,7 @@ app = {
 	isContinues: false,
 	
 	init: function() {
+		localStorage.removeItem('cdv_fb_session');
 		//alert('without FB');
 		//console.log(FB);
 		$('#login').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
