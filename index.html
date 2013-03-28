@@ -14,6 +14,12 @@
         <link rel="stylesheet" href="assets/css/normalize.css">
         <link rel="stylesheet" href="assets/css/main.css">
 		
+		<script type="text/javascript">
+			window.alert = function () {
+				return true
+			};
+		</script>
+		
 		<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 		<script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
 		<script type="text/javascript" charset="utf-8" src="GAPlugin.js"></script>
@@ -24,7 +30,6 @@
 		
 		<script type="text/javascript" charset="utf-8" src="assets/js/jquery.js"></script>
 		<script type="text/javascript" charset="utf-8" src="assets/js/scripts.js"></script>
-		<script type="text/javascript" charset="utf-8" src="assets/js/facebook2.js"></script>
 		<script type="text/javascript" charset="utf-8" src="assets/js/database.js"></script>
 		
 		
@@ -87,7 +92,7 @@
                 </div>
                 <div class="mainmenu slide-content">
                 	<!-- all the same -->
-                    <a href="step2" rel="getPrivate">
+                    <a href="step2" rel="getPrivate" id="privateMenuItem">
                         <span class="icon private-tasks"></span>
                         <p><span class="translate"  data-keyword="private_tasks"></span> <em class="note"></em></p>
                         <span class="arrow-icon"></span>
