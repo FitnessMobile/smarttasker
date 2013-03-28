@@ -209,9 +209,11 @@ app = {
 	isContinues: false,
 	
 	init: function() {
-		alert('without FB');
+		//alert('without FB');
+		$('#login').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
 		setTimeout(function() {
-			alert('INITING FB');
+			$('#login').remove('.ajax-loader');
+			//alert('INITING FB');
 			try {
 				FB.init({ appId: "405225646214042", nativeInterface: CDV.FB, useCachedDialogs: false });
 			} catch (e) {
