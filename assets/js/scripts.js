@@ -393,6 +393,8 @@ app = {
 		app.curFunction = 'AUTHFB';
 		FB.login(
 			function(response) {
+				//console.log(response);
+				data = response;
 				if (response.session) {
 					app.getFacebookMe();
 				} else {
