@@ -1183,6 +1183,7 @@ app = {
 		
 		if (i == $('.started-content').find('a').length) {
 			$('.started-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
+			$('.confirmTasks').hide();
 			$('.confirmTasks').removeClass('disabled');
 			$('.confirmTasks').unbind('click');
 			$('.confirmTasks').click(function(e) {
@@ -1194,6 +1195,7 @@ app = {
 				$.get(app.serverUrl + '?action=finishTask', data, function(result) {
 					if (result.success) {
 						$('.started-content').find('.ajax-loader').remove();
+						$('.confirmTasks').show();
 						if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
 							navigator.notification.alert('Teil on sisestama pangakonto ja/või e-mail, sisestage mõlemad profiili alt', null, 'Teade!');
 							user.done = parseInt(user.done) + 1;
@@ -1456,6 +1458,30 @@ app = {
 		data.user_task_id = app.user_task_id;
 		$.get(app.serverUrl + '?action=doTask', data, function(result) {
 			if (result.success) {
+				if (app.isOneAnswer) {
+					$.get(app.serverUrl + '?action=finishTask', data, function(result) {
+						if (result.success) {
+							if(!user.bank || user.bank == 'null' || !user.mail || user.mail == 'null')
+								navigator.notification.alert(translations[lang]['insert_account'], null, 'Teade!');
+								user.done = parseInt(user.done) + 1;
+								app.updateUser();
+						
+							app.navigate('home.html', 'loadHome');
+							$('.confirmTasks').show();
+						} else {
+							alert('Midagi läks valesti serveris, proovi uuesti.');
+						}
+						//start auto tracking user :) muahaha..
+						
+					}, 'jsonp');
+				} 
+				app.finishedTask = data.sub_task;
+				app.navigate('task.html', 'startTask');
+			}
+		}, 'jsonp');
+		/*
+		$.get(app.serverUrl + '?action=doTask', data, function(result) {
+			if (result.success) {
 				app.finishedTask = data.sub_task;
 				app.navigate('task.html', 'startTask');	
 			} else {
@@ -1464,7 +1490,7 @@ app = {
 			//start auto tracking user :) muahaha..
 			
 		}, 'jsonp');
-		
+		*/
 	},
 	
 	trackUser: function() {
