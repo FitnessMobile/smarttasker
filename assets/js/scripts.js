@@ -340,6 +340,7 @@ app = {
 			$("#login").click(function(e) {
 				e.preventDefault();
 				FB.getLoginStatus(function(response) {
+					app.curFunction = 'FBLOGINSTATUS';
 					if (response.status == 'connected') {
 						app.getFacebookMe();
 					} else {
@@ -389,7 +390,7 @@ app = {
 	},
 	
 	authFacebook: function() {
-		
+		app.curFunction = 'AUTHFB';
 		FB.login(
 			function(response) {
 				if (response.session) {
@@ -1138,6 +1139,7 @@ app = {
 		$('.dir-btn').hide();
 		
 		$('.ajax-loader').remove();
+		$('.confirmTasks').show();
 	
 		app.curFunction = 'startTask';
 		$('.back-btn').unbind('click');
@@ -1632,7 +1634,8 @@ function captureImage() {
 function uploadFile(mediaFile) {
 	
 	$('.sub-content').append('<img src="assets/ajax-loader.gif" class="ajax-loader" style="position:absolute;top:100px;left:45%;" />');
-		
+	$('.confirmTasks').hide();
+	
 	u_user = user.id;
 	u_task = app.currentTask;
 	u_sub_task = app.currentSub;
@@ -1665,6 +1668,7 @@ function uploadFile(mediaFile) {
 						if (parseInt(result.response)) {
 						
 							$('.sub-content').find('.ajax-loader').remove();
+							$('.confirmTasks').show();
 							
 							if (sub_tasks[sub_task].type == 'pic_fb') {
 								//postToFacebook(parseInt(result.response), task.name, sub_tasks[app.currentSub].description, u_sub_task);
@@ -1694,6 +1698,7 @@ function uploadFile(mediaFile) {
 														app.updateUser();
 												
 													app.navigate('home.html', 'loadHome');
+													$('.confirmTasks').show();
 												} else {
 													alert('Midagi läks valesti serveris, proovi uuesti.');
 												}
@@ -1732,6 +1737,7 @@ function uploadFile(mediaFile) {
 							
 							$('.pic_fb').find('.ajax-loader').remove();
 							$('.pic').find('.ajax-loader').remove();
+							$('.confirmTasks').show();
 		
 							navigator.notification.alert('Serveri poolne viga!', null, 'Teade!');
 							app.deliverError(result, '1118');
