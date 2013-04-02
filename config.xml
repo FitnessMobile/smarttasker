@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "ee.efley.smarttasker"
+        id        = "ee.efley.smarttasker2"
         versionCode="14" 
         version   = "1.0.4">
 
