@@ -1284,6 +1284,7 @@ app = {
 		$('.' + sub_tasks[app.currentSub].type).find('.postFB').click(function(e) {
 			e.preventDefault();
 			uploadFile(app.imageURI);
+			$('.' + sub_tasks[app.currentSub].type).find('.postFB').unbind('click');
 		});
 		
 		
@@ -1337,7 +1338,9 @@ app = {
 			case 'pic':
 				anotherCaller = true;
 				$('.sub-content').find('.confirmTask').click(function(e) {
+					e.preventDefault();
 					uploadFile(app.imageURI);
+					$('.sub-content').find('.confirmTask').unbind('click');
 				});
 				break;
 			case 'pic_fb':
