@@ -1182,8 +1182,8 @@ app = {
 		}
 		
 		if (i == $('.started-content').find('a').length) {
-			$('.started-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
-			$('.confirmTasks').hide();
+			//$('.started-content').html('<img src="assets/ajax-loader.gif" class="ajax-loader" style="margin-top:60px;" />');
+			//$('.confirmTasks').hide();
 			$('.confirmTasks').removeClass('disabled');
 			$('.confirmTasks').unbind('click');
 			$('.confirmTasks').click(function(e) {
